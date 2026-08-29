@@ -130,7 +130,9 @@ Uses the **NestJS CQRS module** for command and query handlers.
     while `active`.
 - **`User`** — `id`, `tenantId`, `email` (unique per tenant), `status`, password hash
   (set via `IdentityProvider` port), role IDs (by reference, not object graphs).
-  - States: `invited → active → disabled`.
+  - States: `invited → active → disabled`. In this sub-project, `OnboardUser` creates a
+    user directly in the `active` state; `invited` is reserved for a future email-invite
+    flow.
   - Invariants: cannot assign a role that does not exist in the tenant; cannot disable
     the last active admin.
 
@@ -172,6 +174,9 @@ Past-tense, versioned (`v1`), each carrying full metadata (§2.2):
   the tenant is a compile-time error.
 - **Platform-level operations** (e.g. `ProvisionTenant`) run under an explicit
   `PLATFORM` context that bypasses tenant scoping, gated by a platform-admin role.
+- **Bootstrap** — because `ProvisionTenant` requires a platform-admin, the service seeds
+  an initial platform-admin user at startup when none exists (credentials from
+  environment config). This is the only non-tenant-scoped write path and is idempotent.
 
 ## 5. Authentication & authorization
 
