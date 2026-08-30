@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package daos.investor.v1;
+
+service InvestorService {
+  rpc CheckEligibility(CheckEligibilityRequest) returns (CheckEligibilityResponse);
+  rpc GetInvestorProfile(GetInvestorProfileRequest) returns (GetInvestorProfileResponse);
+  rpc ListEligibleInvestors(ListEligibleInvestorsRequest) returns (ListEligibleInvestorsResponse);
+}
+
+message CheckEligibilityRequest {
+  string investor_id = 1;
+  string product_id = 2;
+  string action = 3;
+  double amount = 4;
+}
+
+message CheckEligibilityResponse {
+  bool compliant = 1;
+  repeated Violation violations = 2;
+  string message = 3;
+}
+
+message Violation {
+  string rule_type = 1;
+  string description = 2;
+  double threshold = 3;
+  double current_value = 4;
+}
+
+message GetInvestorProfileRequest {
+  string investor_id = 1;
+}
+
+message GetInvestorProfileResponse {
+  string id = 1;
+  string email = 2;
+  string status = 3;
+  bool kyc_approved = 4;
+  bool accreditation_verified = 5;
+  string accreditation_level = 6;
+  RiskProfile risk_profile = 7;
+}
+
+message RiskProfile {
+  string risk_tolerance = 1;
+  string investment_horizon = 2;
+  string liquidity_needs = 3;
+}
+
+message ListEligibleInvestorsRequest {
+  string product_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListEligibleInvestorsResponse {
+  repeated EligibleInvestor investors = 1;
+  string next_page_token = 2;
+}
+
+message EligibleInvestor {
+  string investor_id = 1;
+  string email = 2;
+  string status = 3;
+}

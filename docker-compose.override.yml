@@ -1,0 +1,20 @@
+version: '3.9'
+
+# Development overrides — not committed to production deployments.
+# Enables local port exposure for direct DB/cache access from dev tools.
+
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: daos_dev_password
+    ports:
+      - '5432:5432'
+
+  redis:
+    ports:
+      - '6379:6379'
+
+  kafka:
+    environment:
+      # Allow larger message sizes in dev
+      KAFKA_MESSAGE_MAX_BYTES: 10485760

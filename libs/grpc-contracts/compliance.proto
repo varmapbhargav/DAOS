@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package daos.compliance.v1;
+
+service ComplianceService {
+  rpc CheckPreTradeCompliance(CheckPreTradeComplianceRequest) returns (CheckPreTradeComplianceResponse);
+  rpc GetInvestorCount(GetInvestorCountRequest) returns (GetInvestorCountResponse);
+}
+
+message CheckPreTradeComplianceRequest {
+  string investor_id = 1;
+  string product_id = 2;
+  string action = 3;
+  double amount = 4;
+}
+
+message CheckPreTradeComplianceResponse {
+  bool compliant = 1;
+  repeated ComplianceViolation violations = 2;
+  string approval_status = 3;
+}
+
+message ComplianceViolation {
+  string rule_type = 1;
+  string description = 2;
+  double threshold = 3;
+  double current_value = 4;
+}
+
+message GetInvestorCountRequest {
+  string product_id = 1;
+  string regulatory_framework = 2;
+}
+
+message GetInvestorCountResponse {
+  int32 current_count = 1;
+  int32 limit = 2;
+  double threshold_percentage = 3;
+  bool approaching_limit = 4;
+  bool at_limit = 5;
+}

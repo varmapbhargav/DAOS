@@ -1,0 +1,1 @@
+{ "extends": "../../tsconfig.json", "compilerOptions": { "outDir": "../../dist/libs/opportunity-api", "declaration": true }, "include": ["src/**/*"] }

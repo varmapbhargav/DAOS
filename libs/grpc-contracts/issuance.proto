@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package daos.issuance.v1;
+
+service IssuanceService {
+  rpc GetWhitelistStatus(GetWhitelistStatusRequest) returns (GetWhitelistStatusResponse);
+  rpc GetTokenBalance(GetTokenBalanceRequest) returns (GetTokenBalanceResponse);
+}
+
+message GetWhitelistStatusRequest {
+  string investor_id = 1;
+  string issuance_id = 2;
+}
+
+message GetWhitelistStatusResponse {
+  bool is_whitelisted = 1;
+  string status = 2;
+  int64 tokens_allocated = 3;
+}
+
+message GetTokenBalanceRequest {
+  string investor_id = 1;
+  string token_address = 2;
+}
+
+message GetTokenBalanceResponse {
+  string investor_id = 1;
+  string token_address = 2;
+  uint64 balance = 3;
+  string currency = 4;
+}

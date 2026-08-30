@@ -1,0 +1,5 @@
+export const LISTING_REPOSITORY = Symbol('LISTING_REPOSITORY');
+export const ORDER_REPOSITORY = Symbol('ORDER_REPOSITORY');
+export const TRADE_REPOSITORY = Symbol('TRADE_REPOSITORY');
+export const ORDER_BOOK_CACHE = Symbol('ORDER_BOOK_CACHE');
+export const OUTBOX_PUBLISHER = Symbol('OUTBOX_PUBLISHER');

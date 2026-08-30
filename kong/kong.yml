@@ -1,0 +1,240 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  # Identity service
+  - name: identity-service
+    url: http://tenant-identity:3001
+
+  # Investors
+  - name: investors-service
+    url: http://investor-management:3002
+  - name: investors-alias
+    url: http://investor-management:3002
+
+  # Assets
+  - name: assets-service
+    url: http://asset-origination:3003
+  - name: assets-alias
+    url: http://asset-origination:3003
+
+  # Opportunities
+  - name: opportunities-service
+    url: http://opportunity-engineering:3004
+  - name: opportunities-alias
+    url: http://opportunity-engineering:3004
+
+  # Deals
+  - name: deals-service
+    url: http://deal-studio:3005
+
+  # Entities
+  - name: entities-service
+    url: http://legal-entity-studio:3006
+
+  # Products
+  - name: products-service
+    url: http://product-design-studio:3007
+
+  # Issuances
+  - name: issuances-service
+    url: http://issuance-studio:3008
+
+  # Subscriptions
+  - name: subscriptions-service
+    url: http://distribution:3009
+  - name: capital-calls-alias
+    url: http://distribution:3009
+  - name: closings-alias
+    url: http://distribution:3009
+
+  # Listings
+  - name: listings-service
+    url: http://marketplace:3010
+  - name: orders-alias
+    url: http://marketplace:3010
+  - name: trades-alias
+    url: http://marketplace:3010
+
+  # Settlements
+  - name: settlements-service
+    url: http://settlement:3012
+
+  # Distributions
+  - name: distributions-service
+    url: http://waterfall-engine:3011
+  - name: corporate-actions-alias
+    url: http://waterfall-engine:3011
+
+  # Compliance
+  - name: compliance-service
+    url: http://compliance:3013
+
+  # Reports
+  - name: reports-service
+    url: http://reporting:3014
+  - name: statements-alias
+    url: http://reporting:3014
+
+  # Documents
+  - name: documents-service
+    url: http://document-management:3015
+
+  # CapTables
+  - name: captables-service
+    url: http://wallet-custody:3021
+
+  # Notifications
+  - name: notifications-service
+    url: http://notification:3016
+
+  # Wallets
+  - name: wallets-service
+    url: http://wallet-custody:3017
+
+  # Prices
+  - name: prices-service
+    url: http://pricing-valuation:3018
+  - name: valuations-alias
+    url: http://pricing-valuation:3018
+
+  # Risks
+  - name: risks-service
+    url: http://risk-management:3019
+
+  # Proposals
+  - name: proposals-service
+    url: http://governance:3020
+  - name: votes-alias
+    url: http://governance:3020
+  - name: meetings-alias
+    url: http://governance:3020
+
+routes:
+  # Identity routes
+  - name: identity-auth-route
+    paths: ["/auth", "/tenants", "/users", "/roles"]
+    service: identity-service
+
+  # Me composition route
+  - name: me-route
+    paths: ["/me"]
+    service: identity-service
+
+  # Bounded-context routes (explicit)
+  - name: investors-route
+    paths: ["/investors", "/investors/"]
+    service: investors-service
+
+  - name: assets-route
+    paths: ["/assets", "/assets/"]
+    service: assets-service
+
+  - name: opportunities-route
+    paths: ["/opportunities", "/opportunities/"]
+    service: opportunities-service
+
+  - name: deals-route
+    paths: ["/deals", "/deals/"]
+    service: deals-service
+
+  - name: entities-route
+    paths: ["/entities", "/entities/"]
+    service: entities-service
+
+  - name: products-route
+    paths: ["/products", "/products/"]
+    service: products-service
+
+  - name: issuances-route
+    paths: ["/issuances", "/issuances/"]
+    service: issuances-service
+
+  - name: subscriptions-route
+    paths: ["/subscriptions", "/subscriptions/"]
+    service: subscriptions-service
+
+  - name: listings-route
+    paths: ["/listings", "/listings/"]
+    service: listings-service
+
+  - name: settlements-route
+    paths: ["/settlements", "/settlements/"]
+    service: settlements-service
+
+  - name: distributions-route
+    paths: ["/distributions", "/distributions/"]
+    service: distributions-service
+
+  - name: compliance-route
+    paths: ["/compliance", "/compliance/"]
+    service: compliance-service
+
+  - name: reports-route
+    paths: ["/reports", "/reports/"]
+    service: reports-service
+
+  - name: documents-route
+    paths: ["/documents", "/documents/"]
+    service: documents-service
+
+  - name: captables-route
+    paths: ["/cap-tables", "/cap-tables/"]
+    service: captables-service
+
+  - name: notifications-route
+    paths: ["/notifications", "/notifications/"]
+    service: notifications-service
+
+  - name: wallets-route
+    paths: ["/wallets", "/wallets/"]
+    service: wallets-service
+
+  - name: prices-route
+    paths: ["/prices", "/prices/"]
+    service: prices-service
+
+  - name: risks-route
+    paths: ["/risks", "/risks/"]
+    service: risks-service
+
+  - name: proposals-route
+    paths: ["/proposals", "/proposals/"]
+    service: proposals-service
+
+  # Alias routes for services with multiple prefixes
+  - name: capital-calls-route
+    paths: ["/capital-calls", "/capital-calls/"]
+    service: capital-calls-alias
+
+  - name: closings-route
+    paths: ["/closings", "/closings/"]
+    service: closings-alias
+
+  - name: orders-route
+    paths: ["/orders", "/orders/"]
+    service: orders-alias
+
+  - name: trades-route
+    paths: ["/trades", "/trades/"]
+    service: trades-alias
+
+  - name: corporate-actions-route
+    paths: ["/corporate-actions", "/corporate-actions/"]
+    service: corporate-actions-alias
+
+  - name: statements-route
+    paths: ["/statements", "/statements/"]
+    service: statements-alias
+
+  - name: valuations-route
+    paths: ["/valuations", "/valuations/"]
+    service: valuations-alias
+
+  - name: votes-route
+    paths: ["/votes", "/votes/"]
+    service: votes-alias
+
+  - name: meetings-route
+    paths: ["/meetings", "/meetings/"]
+    service: meetings-alias

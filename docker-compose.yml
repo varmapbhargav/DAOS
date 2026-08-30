@@ -1,0 +1,150 @@
+version: '3.9'
+
+services:
+  # ─── PostgreSQL ───────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: daos-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: daos
+      POSTGRES_PASSWORD: daos_dev_password
+      POSTGRES_DB: daos
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U daos']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── Redis ────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: daos-redis
+    restart: unless-stopped
+    command: redis-server --requirepass daos_redis_password --save 60 1
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', 'daos_redis_password', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── Zookeeper (Kafka dependency) ─────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: daos-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_log:/var/lib/zookeeper/log
+    healthcheck:
+      test: ['CMD', 'echo', 'ruok', '|', 'nc', 'localhost', '2181']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Kafka ────────────────────────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: daos-kafka
+    restart: unless-stopped
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9093,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_LOG_RETENTION_HOURS: 168
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ['CMD', 'kafka-broker-api-versions', '--bootstrap-server', 'localhost:9092']
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # ─── Confluent Schema Registry ────────────────────────────────────────────
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.1
+    container_name: daos-schema-registry
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - '8081:8081'
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9093
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+
+  # ─── Kong API Gateway ─────────────────────────────────────────────────────
+  kong:
+    image: kong:3.5-alpine
+    container_name: daos-kong
+    restart: unless-stopped
+    ports:
+      - '8000:8000'   # Proxy
+      - '8443:8443'   # HTTPS proxy
+      - '8001:8001'   # Admin API
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: '/kong/kong.yml'
+      KONG_PROXY_ACCESS_LOG: '/dev/stdout'
+      KONG_PROXY_ERROR_LOG: '/dev/stderr'
+      KONG_ADMIN_ACCESS_LOG: '/dev/stdout'
+      KONG_ADMIN_ERROR_LOG: '/dev/stderr'
+    volumes:
+      - ./kong:/kong
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+      - schema-registry
+
+  # ─── Flyway (runs migrations on startup) ──────────────────────────────────
+  flyway:
+    image: flyway/flyway:10-alpine
+    container_name: daos-flyway
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./db/migrations:/flyway/sql:ro
+    environment:
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/daos
+      FLYWAY_USER: daos
+      FLYWAY_PASSWORD: daos_dev_password
+      FLYWAY_SCHEMAS: tenant_identity,investor_management,asset_origination,opportunity_engineering,deal_studio,legal_entity_studio,product_design_studio,issuance_studio,document_management,cap_table,distribution,marketplace,settlement,waterfall_engine,pricing_valuation
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql/tenant_identity,filesystem:/flyway/sql/investor_management,filesystem:/flyway/sql/asset_origination,filesystem:/flyway/sql/opportunity_engineering,filesystem:/flyway/sql/deal_studio,filesystem:/flyway/sql/legal_entity_studio,filesystem:/flyway/sql/product_design_studio,filesystem:/flyway/sql/issuance_studio,filesystem:/flyway/sql/document_management,filesystem:/flyway/sql/cap_table,filesystem:/flyway/sql/distribution,filesystem:/flyway/sql/marketplace,filesystem:/flyway/sql/settlement,filesystem:/flyway/sql/waterfall_engine,filesystem:/flyway/sql/pricing_valuation
+      FLYWAY_BASELINE_ON_MIGRATE: 'true'
+      FLYWAY_MIXED: 'true'
+    command: migrate
+    profiles:
+      - migrate
+
+volumes:
+  postgres_data:
+  redis_data:
+  zookeeper_data:
+  zookeeper_log:
+  kafka_data:

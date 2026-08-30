@@ -140,7 +140,7 @@ C:\Wrk\DAOS
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
-    "@nestjs/config": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/cqrs": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
@@ -3431,14 +3431,14 @@ import {
   ArgumentsHost,
   BadRequestException,
   Catch,
-  ExceptionsFilter,
+  ExceptionFilter,
   ForbiddenException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConflictError, DomainInvariantError, InvalidCredentialsError, NotFoundError } from '@daos/shared-kernel';
 
 @Catch()
-export class DomainExceptionFilter implements ExceptionsFilter {
+export class DomainExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package daos.wallet.v1;
+
+service WalletService {
+  rpc ValidateAddress(ValidateAddressRequest) returns (ValidateAddressResponse);
+  rpc GetWalletStatus(GetWalletStatusRequest) returns (GetWalletStatusResponse);
+}
+
+message ValidateAddressRequest {
+  string wallet_address = 1;
+  string blockchain_network = 2;
+}
+
+message ValidateAddressResponse {
+  bool is_valid = 1;
+  string network = 2;
+  string error_message = 3;
+}
+
+message GetWalletStatusRequest {
+  string investor_id = 1;
+}
+
+message GetWalletStatusResponse {
+  string wallet_id = 1;
+  string status = 2;
+  repeated WalletAddress addresses = 3;
+  bool is_frozen = 4;
+  string provider = 5;
+}
+
+message WalletAddress {
+  string address = 1;
+  string network = 2;
+  bool is_default = 3;
+}

@@ -1,0 +1,2 @@
+export const CAP_TABLE_REPOSITORY = Symbol('CAP_TABLE_REPOSITORY');
+export const OUTBOX_PUBLISHER = Symbol('OUTBOX_PUBLISHER');

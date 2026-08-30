@@ -23,6 +23,104 @@
       "sourceRoot": "apps/tenant-identity/src",
       "compilerOptions": { "tsConfigPath": "apps/tenant-identity/tsconfig.app.json" }
     },
+    "investor-management": {
+      "type": "application",
+      "root": "apps/investor-management",
+      "entryFile": "main",
+      "sourceRoot": "apps/investor-management/src",
+      "compilerOptions": { "tsConfigPath": "apps/investor-management/tsconfig.app.json" }
+    },
+    "asset-origination": {
+      "type": "application",
+      "root": "apps/asset-origination",
+      "entryFile": "main",
+      "sourceRoot": "apps/asset-origination/src",
+      "compilerOptions": { "tsConfigPath": "apps/asset-origination/tsconfig.app.json" }
+    },
+    "opportunity-engineering": {
+      "type": "application",
+      "root": "apps/opportunity-engineering",
+      "entryFile": "main",
+      "sourceRoot": "apps/opportunity-engineering/src",
+      "compilerOptions": { "tsConfigPath": "apps/opportunity-engineering/tsconfig.app.json" }
+    },
+    "deal-studio": {
+      "type": "application",
+      "root": "apps/deal-studio",
+      "entryFile": "main",
+      "sourceRoot": "apps/deal-studio/src",
+      "compilerOptions": { "tsConfigPath": "apps/deal-studio/tsconfig.app.json" }
+    },
+    "legal-entity-studio": {
+      "type": "application",
+      "root": "apps/legal-entity-studio",
+      "entryFile": "main",
+      "sourceRoot": "apps/legal-entity-studio/src",
+      "compilerOptions": { "tsConfigPath": "apps/legal-entity-studio/tsconfig.app.json" }
+    },
+    "product-design-studio": {
+      "type": "application",
+      "root": "apps/product-design-studio",
+      "entryFile": "main",
+      "sourceRoot": "apps/product-design-studio/src",
+      "compilerOptions": { "tsConfigPath": "apps/product-design-studio/tsconfig.app.json" }
+    },
+    "issuance-studio": {
+      "type": "application",
+      "root": "apps/issuance-studio",
+      "entryFile": "main",
+      "sourceRoot": "apps/issuance-studio/src",
+      "compilerOptions": { "tsConfigPath": "apps/issuance-studio/tsconfig.app.json" }
+    },
+    "document-management": {
+      "type": "application",
+      "root": "apps/document-management",
+      "entryFile": "main",
+      "sourceRoot": "apps/document-management/src",
+      "compilerOptions": { "tsConfigPath": "apps/document-management/tsconfig.app.json" }
+    },
+    "cap-table": {
+      "type": "application",
+      "root": "apps/cap-table",
+      "entryFile": "main",
+      "sourceRoot": "apps/cap-table/src",
+      "compilerOptions": { "tsConfigPath": "apps/cap-table/tsconfig.app.json" }
+    },
+    "distribution": {
+      "type": "application",
+      "root": "apps/distribution",
+      "entryFile": "main",
+      "sourceRoot": "apps/distribution/src",
+      "compilerOptions": { "tsConfigPath": "apps/distribution/tsconfig.app.json" }
+    },
+    "marketplace": {
+      "type": "application",
+      "root": "apps/marketplace",
+      "entryFile": "main",
+      "sourceRoot": "apps/marketplace/src",
+      "compilerOptions": { "tsConfigPath": "apps/marketplace/tsconfig.app.json" }
+    },
+    "settlement": {
+      "type": "application",
+      "root": "apps/settlement",
+      "entryFile": "main",
+      "sourceRoot": "apps/settlement/src",
+      "compilerOptions": { "tsConfigPath": "apps/settlement/tsconfig.app.json" }
+    },
+    "waterfall-engine": {
+      "type": "application",
+      "root": "apps/waterfall-engine",
+      "entryFile": "main",
+      "sourceRoot": "apps/waterfall-engine/src",
+      "compilerOptions": { "tsConfigPath": "apps/waterfall-engine/tsconfig.app.json" }
+    },
+    "pricing-valuation": {
+      "type": "application",
+      "root": "apps/pricing-valuation",
+      "entryFile": "main",
+      "sourceRoot": "apps/pricing-valuation/src",
+      "compilerOptions": { "tsConfigPath": "apps/pricing-valuation/tsconfig.app.json" }
+    },
     "shared-kernel": {
       "type": "library",
       "root": "libs/shared-kernel",
@@ -36,6 +134,41 @@
       "entryFile": "index",
       "sourceRoot": "libs/identity-api/src",
       "compilerOptions": { "tsConfigPath": "libs/identity-api/tsconfig.lib.json" }
+    },
+    "investor-api": {
+      "type": "library",
+      "root": "libs/investor-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/investor-api/src",
+      "compilerOptions": { "tsConfigPath": "libs/investor-api/tsconfig.lib.json" }
+    },
+    "asset-api": {
+      "type": "library",
+      "root": "libs/asset-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/asset-api/src",
+      "compilerOptions": { "tsConfigPath": "libs/asset-api/tsconfig.lib.json" }
+    },
+    "opportunity-api": {
+      "type": "library",
+      "root": "libs/opportunity-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/opportunity-api/src",
+      "compilerOptions": { "tsConfigPath": "libs/opportunity-api/tsconfig.lib.json" }
+    },
+    "compliance": {
+      "type": "application",
+      "root": "apps/compliance",
+      "entryFile": "main",
+      "sourceRoot": "apps/compliance/src",
+      "compilerOptions": { "tsConfigPath": "apps/compliance/tsconfig.app.json" }
+    },
+    "governance": {
+      "type": "application",
+      "root": "apps/governance",
+      "entryFile": "main",
+      "sourceRoot": "apps/governance/src",
+      "compilerOptions": { "tsConfigPath": "apps/governance/tsconfig.app.json" }
     }
   }
 }

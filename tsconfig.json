@@ -21,7 +21,13 @@
       "@daos/shared-kernel": ["libs/shared-kernel/src"],
       "@daos/shared-kernel/*": ["libs/shared-kernel/src/*"],
       "@daos/identity-api": ["libs/identity-api/src"],
-      "@daos/identity-api/*": ["libs/identity-api/src/*"]
+      "@daos/identity-api/*": ["libs/identity-api/src/*"],
+      "@daos/investor-api": ["libs/investor-api/src"],
+      "@daos/investor-api/*": ["libs/investor-api/src/*"],
+      "@daos/asset-api": ["libs/asset-api/src"],
+      "@daos/asset-api/*": ["libs/asset-api/src/*"],
+      "@daos/opportunity-api": ["libs/opportunity-api/src"],
+      "@daos/opportunity-api/*": ["libs/opportunity-api/src/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
