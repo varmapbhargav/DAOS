@@ -1,0 +1,1 @@
+{ "extends": "../../tsconfig.json", "compilerOptions": { "outDir": "../../dist/libs/identity-api", "declaration": true }, "include": ["src/**/*"] }

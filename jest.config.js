@@ -1,0 +1,14 @@
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  roots: ['<rootDir>/apps', '<rootDir>/libs'],
+  testMatch: ['**/*.spec.ts', '**/*.e2e-spec.ts'],
+  moduleNameMapper: {
+    '^@daos/shared-kernel/(.*)$': '<rootDir>/libs/shared-kernel/src/$1',
+    '^@daos/shared-kernel$': '<rootDir>/libs/shared-kernel/src',
+    '^@daos/identity-api/(.*)$': '<rootDir>/libs/identity-api/src/$1',
+    '^@daos/identity-api$': '<rootDir>/libs/identity-api/src',
+  },
+  testTimeout: 30000,
+  collectCoverageFrom: ['libs/**/src/**/*.ts', 'apps/**/src/domain/**/*.ts'],
+};
