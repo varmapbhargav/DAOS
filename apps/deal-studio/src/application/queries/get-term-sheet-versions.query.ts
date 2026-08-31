@@ -25,15 +25,15 @@ export class GetTermSheetVersionsHandler implements IQueryHandler<GetTermSheetVe
     const deal = await this.deals.findById(tenantId, DealId.create(query.dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${query.dealId}`);
 
-    const termSheets = await this.termSheets.findByDealId(tenantId, deal.id.value);
-    if (!termSheets) return [];
+    const termSheet = await this.termSheets.findByDealId(tenantId, deal.id.value);
+    if (!termSheet) return [];
 
-    return termSheets.map((ts) => ({
-      id: ts.id.value,
-      status: ts.status,
-      finalizedAt: ts.finalizedAt,
-      finalizedBy: ts.finalizedBy,
-      createdAt: ts.createdAt,
+    return termSheet.versions.map((v) => ({
+      id: v.versionId,
+      versionNumber: v.versionNumber,
+      status: v.status,
+      createdAt: v.createdAt,
+      amendmentReason: v.amendmentReason,
     }));
   }
 }

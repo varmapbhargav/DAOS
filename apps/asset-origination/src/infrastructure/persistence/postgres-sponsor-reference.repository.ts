@@ -1,12 +1,11 @@
-import { EntityId, TenantId } from '@daos/shared-kernel';
+import { TenantId } from '@daos/shared-kernel';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { SponsorReference } from '../../domain/entities/sponsor-reference.entity';
-import { SponsorReferenceOrmEntity } from '../entities/sponsor-reference.orm-entity';
+import { SponsorReferenceOrmEntity } from './entities/sponsor-reference.orm-entity';
 import { SponsorReferenceRepository } from '../../domain/repositories/sponsor-reference.repository';
-import { SponsorReference as SponsorRefDomain } from '../../domain/entities/sponsor-reference.entity';
 
 @Injectable()
 export class PostgresSponsorReferenceRepository implements SponsorReferenceRepository {
@@ -39,12 +38,12 @@ export class PostgresSponsorReferenceRepository implements SponsorReferenceRepos
     });
   }
 
-  async findByEntityId(tenantId: TenantId, entityId: EntityId): Promise<SponsorReference | null> {
+  async findByEntityId(tenantId: TenantId, entityId: string): Promise<SponsorReference | null> {
     const e = await this.ds.transaction(async (manager) => {
       await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
       return manager
         .getRepository(SponsorReferenceOrmEntity)
-        .findOne({ where: { entityId: entityId.value, tenantId: tenantId.value } });
+        .findOne({ where: { entityId, tenantId: tenantId.value } });
     });
     if (!e) return null;
     return {

@@ -25,45 +25,45 @@ export class GetDealEconomicsHandler implements IQueryHandler<GetDealEconomicsQu
     if (!economics) return null;
 
     return {
-      acquisitionPrice: economics.data.acquisitionPrice
+      acquisitionPrice: economics.acquisitionPrice
         ? {
-            amountMinorUnits: economics.data.acquisitionPrice.amount.toString(),
-            currency: economics.data.acquisitionPrice.currency,
+            amountMinorUnits: economics.acquisitionPrice.amount.toString(),
+            currency: economics.acquisitionPrice.currency,
           }
         : null,
-      enterpriseValue: economics.data.enterpriseValue
+      enterpriseValue: economics.enterpriseValue
         ? {
-            amountMinorUnits: economics.data.enterpriseValue.amount.toString(),
-            currency: economics.data.enterpriseValue.currency,
+            amountMinorUnits: economics.enterpriseValue.amount.toString(),
+            currency: economics.enterpriseValue.currency,
           }
         : null,
-      equityValue: economics.data.equityValue
+      equityValue: economics.equityValue
         ? {
-            amountMinorUnits: economics.data.equityValue.amount.toString(),
-            currency: economics.data.equityValue.currency,
+            amountMinorUnits: economics.equityValue.amount.toString(),
+            currency: economics.equityValue.currency,
           }
         : null,
-      totalCapitalization: economics.data.totalCapitalization
+      totalCapitalization: economics.totalCapitalization
         ? {
-            amountMinorUnits: economics.data.totalCapitalization.amount.toString(),
-            currency: economics.data.totalCapitalization.currency,
+            amountMinorUnits: economics.totalCapitalization.amount.toString(),
+            currency: economics.totalCapitalization.currency,
           }
         : null,
-      fees: economics.data.fees
+      fees: economics.fees
         ? {
-            amountMinorUnits: economics.data.fees.amount.toString(),
-            currency: economics.data.fees.currency,
+            amountMinorUnits: economics.fees.amount.toString(),
+            currency: economics.fees.currency,
           }
         : null,
-      expenses: economics.data.expenses
+      expenses: economics.expenses
         ? {
-            amountMinorUnits: economics.data.expenses.amount.toString(),
-            currency: economics.data.expenses.currency,
+            amountMinorUnits: economics.expenses.amount.toString(),
+            currency: economics.expenses.currency,
           }
         : null,
-      targetIrr: economics.data.targetIrr?.toFraction() ?? null,
-      targetMoic: economics.data.targetMoic ?? null,
-      expectedYield: economics.data.expectedYield?.toFraction() ?? null,
+      targetIrr: economics.targetIrr?.toFraction() ?? null,
+      targetMoic: economics.targetMoic ?? null,
+      expectedYield: economics.expectedYield?.toFraction() ?? null,
     };
   }
 }

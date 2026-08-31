@@ -1,0 +1,16 @@
+type: Dataplane
+mesh: default
+name: wallet-custody
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3017
+      tags:
+        kuma.io/service: wallets
+        kuma.io/protocol: http
+    - port: 9001
+      servicePort: 3021
+      tags:
+        kuma.io/service: cap-table
+        kuma.io/protocol: http

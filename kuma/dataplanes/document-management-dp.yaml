@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: document-management
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3015
+      tags:
+        kuma.io/service: document-management
+        kuma.io/protocol: http

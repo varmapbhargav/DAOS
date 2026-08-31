@@ -1,5 +1,6 @@
 // Deal Structuring Value Objects — full domain model
-import { Money, Percentage } from './percentage';
+import { Money } from './money';
+import { Percentage } from './percentage';
 
 // ─── Deal Status ───────────────────────────────────────────────────────────────
 
@@ -320,7 +321,7 @@ export type ApprovalReference = {
 
 // ─── Document Reference ───────────────────────────────────────────────────────
 
-export type DocumentCategory =
+export type DealDocumentCategory =
   | 'TERM_SHEET'
   | 'FINANCIAL_MODEL'
   | 'INVESTMENT_MEMO'
@@ -339,7 +340,7 @@ export type DocumentLifecycleStatus =
 export type DealDocumentReference = {
   documentId: string;
   externalStorageRef: string;
-  category: DocumentCategory;
+  category: DealDocumentCategory;
   title: string;
   status: DocumentLifecycleStatus;
   uploadedBy: string;
@@ -362,7 +363,7 @@ export type EntityRole =
   | 'SPV'
   | 'COUNTERPARTY';
 
-export type EntityReference = {
+export type DealEntityReference = {
   entityId: string;
   entityName: string | null;
   role: EntityRole;

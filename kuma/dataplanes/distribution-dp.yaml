@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: distribution
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3009
+      tags:
+        kuma.io/service: distribution
+        kuma.io/protocol: http

@@ -15,6 +15,24 @@ export class AssetOrmEntity {
   @Column({ name: 'asset_class', type: 'text' })
   assetClass!: string;
 
+  @Column({ name: 'asset_subclass', type: 'text', default: 'residential' })
+  assetSubClass!: string;
+
+  @Column({ name: 'legal_name', type: 'text', default: '' })
+  legalName!: string;
+
+  @Column({ name: 'country', type: 'text', default: '' })
+  country!: string;
+
+  @Column({ name: 'external_reference', type: 'text', nullable: true })
+  externalReference!: string | null;
+
+  @Column({ name: 'internal_reference', type: 'text', nullable: true })
+  internalReference!: string | null;
+
+  @Column({ name: 'source', type: 'jsonb', nullable: true })
+  source!: object | null;
+
   @Column({ name: 'sponsor_id', type: 'uuid' })
   sponsorId!: string;
 

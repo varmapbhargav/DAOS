@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: deal-studio
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3005
+      tags:
+        kuma.io/service: deal-studio
+        kuma.io/protocol: http

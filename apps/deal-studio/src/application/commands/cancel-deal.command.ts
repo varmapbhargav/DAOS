@@ -29,10 +29,11 @@ export class CancelDealHandler implements ICommandHandler<CancelDealCommand, { s
 
   async execute(command: CancelDealCommand): Promise<{ status: string }> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actorId = TenantContextHolder.get().userId ?? 'system';
     const deal = await this.deals.findById(tenantId, DealId.create(command.dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${command.dealId}`);
 
-    deal.cancel(command.dto.reason);
+    deal.cancel(actorId, command.dto.reason);
     await this.deals.save(deal);
     await this.outbox.publish(deal.pullEvents());
     return { status: deal.status };

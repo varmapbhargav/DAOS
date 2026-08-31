@@ -1,0 +1,11 @@
+type: MeshTrafficPermission
+name: daos-default-deny
+mesh: default
+spec:
+  targetRef:
+    kind: Mesh
+  from:
+    - targetRef:
+        kind: Mesh
+      default:
+        action: Deny

@@ -1,127 +1,269 @@
 _format_version: "2.1"
-_transform: true
 
 services:
-  # Identity service
+  # ── Identity ──────────────────────────────────────────────────────────────
   - name: identity-service
-    url: http://tenant-identity:3001
+    url: http://tenant-identity:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Investors
+  # ── Investors ─────────────────────────────────────────────────────────────
   - name: investors-service
-    url: http://investor-management:3002
+    url: http://investor-management:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: investors-alias
-    url: http://investor-management:3002
+    url: http://investor-management:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Assets
+  # ── Assets ────────────────────────────────────────────────────────────────
   - name: assets-service
-    url: http://asset-origination:3003
+    url: http://asset-origination:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: assets-alias
-    url: http://asset-origination:3003
+    url: http://asset-origination:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Opportunities
+  # ── Opportunities ─────────────────────────────────────────────────────────
   - name: opportunities-service
-    url: http://opportunity-engineering:3004
+    url: http://opportunity-engineering:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: opportunities-alias
-    url: http://opportunity-engineering:3004
+    url: http://opportunity-engineering:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Deals
+  # ── Deals ─────────────────────────────────────────────────────────────────
   - name: deals-service
-    url: http://deal-studio:3005
+    url: http://deal-studio:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Entities
+  # ── Entities ──────────────────────────────────────────────────────────────
   - name: entities-service
-    url: http://legal-entity-studio:3006
+    url: http://legal-entity-studio:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Products
+  # ── Products ──────────────────────────────────────────────────────────────
   - name: products-service
-    url: http://product-design-studio:3007
+    url: http://product-design-studio:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Issuances
+  # ── Issuances ─────────────────────────────────────────────────────────────
   - name: issuances-service
-    url: http://issuance-studio:3008
+    url: http://issuance-studio:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Subscriptions
+  # ── Subscriptions / Capital Calls / Closings (distribution) ───────────────
   - name: subscriptions-service
-    url: http://distribution:3009
+    url: http://distribution:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: capital-calls-alias
-    url: http://distribution:3009
+    url: http://distribution:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: closings-alias
-    url: http://distribution:3009
+    url: http://distribution:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Listings
+  # ── Listings / Orders / Trades (marketplace) ──────────────────────────────
   - name: listings-service
-    url: http://marketplace:3010
+    url: http://marketplace:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: orders-alias
-    url: http://marketplace:3010
+    url: http://marketplace:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: trades-alias
-    url: http://marketplace:3010
+    url: http://marketplace:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Settlements
+  # ── Settlements ───────────────────────────────────────────────────────────
   - name: settlements-service
-    url: http://settlement:3012
+    url: http://settlement:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Distributions
+  # ── Distributions / Corporate Actions (waterfall-engine) ──────────────────
   - name: distributions-service
-    url: http://waterfall-engine:3011
+    url: http://waterfall-engine:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: corporate-actions-alias
-    url: http://waterfall-engine:3011
+    url: http://waterfall-engine:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Compliance
+  # ── Compliance ────────────────────────────────────────────────────────────
   - name: compliance-service
-    url: http://compliance:3013
+    url: http://compliance:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Reports
+  # ── Reports / Statements (reporting) ──────────────────────────────────────
   - name: reports-service
-    url: http://reporting:3014
+    url: http://reporting:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: statements-alias
-    url: http://reporting:3014
+    url: http://reporting:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Documents
+  # ── Documents ─────────────────────────────────────────────────────────────
   - name: documents-service
-    url: http://document-management:3015
+    url: http://document-management:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # CapTables
+  # ── Cap Tables (wallet-custody :3021 → sidecar :9001) ────────────────────
   - name: captables-service
-    url: http://wallet-custody:3021
+    url: http://wallet-custody:9001
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Notifications
+  # ── Notifications ─────────────────────────────────────────────────────────
   - name: notifications-service
-    url: http://notification:3016
+    url: http://notification:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Wallets
+  # ── Wallets (wallet-custody :3017 → sidecar :9000) ───────────────────────
   - name: wallets-service
-    url: http://wallet-custody:3017
+    url: http://wallet-custody:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Prices
+  # ── Prices / Valuations (pricing-valuation) ───────────────────────────────
   - name: prices-service
-    url: http://pricing-valuation:3018
+    url: http://pricing-valuation:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: valuations-alias
-    url: http://pricing-valuation:3018
+    url: http://pricing-valuation:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Risks
+  # ── Risks ─────────────────────────────────────────────────────────────────
   - name: risks-service
-    url: http://risk-management:3019
+    url: http://risk-management:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
-  # Proposals
+  # ── Proposals / Votes / Meetings (governance) ─────────────────────────────
   - name: proposals-service
-    url: http://governance:3020
+    url: http://governance:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: votes-alias
-    url: http://governance:3020
+    url: http://governance:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
   - name: meetings-alias
-    url: http://governance:3020
+    url: http://governance:9000
+    connect_timeout: 5000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 2
 
 routes:
-  # Identity routes
+  # Identity routes (auth endpoints stay open — issuer)
   - name: identity-auth-route
-    paths: ["/auth", "/tenants", "/users", "/roles"]
+    paths: ["/auth"]
     service: identity-service
 
-  # Me composition route
+  - name: identity-tenants-route
+    paths: ["/tenants", "/tenants/"]
+    service: identity-service
+
+  - name: identity-users-route
+    paths: ["/users", "/users/"]
+    service: identity-service
+
+  - name: identity-roles-route
+    paths: ["/roles", "/roles/"]
+    service: identity-service
+
   - name: me-route
-    paths: ["/me"]
+    paths: ["/me", "/me/"]
     service: identity-service
 
-  # Bounded-context routes (explicit)
+  # Bounded-context routes
   - name: investors-route
     paths: ["/investors", "/investors/"]
     service: investors-service
@@ -202,7 +344,7 @@ routes:
     paths: ["/proposals", "/proposals/"]
     service: proposals-service
 
-  # Alias routes for services with multiple prefixes
+  # Alias routes
   - name: capital-calls-route
     paths: ["/capital-calls", "/capital-calls/"]
     service: capital-calls-alias
@@ -238,3 +380,231 @@ routes:
   - name: meetings-route
     paths: ["/meetings", "/meetings/"]
     service: meetings-alias
+
+plugins:
+  # ── Global rate limiting (Redis-backed) ────────────────────────────────────
+  - name: rate-limiting
+    config:
+      minute: 1000
+      policy: redis
+      redis_host: redis
+      redis_port: 6379
+      redis_password: daos_redis_password
+      fault_tolerant: true
+      hide_client_headers: false
+
+  # ── Global CORS ────────────────────────────────────────────────────────────
+  - name: cors
+    config:
+      origins:
+        - '*'
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      headers:
+        - Authorization
+        - Content-Type
+        - X-Tenant-Id
+        - X-Request-Id
+      exposed_headers:
+        - X-RateLimit-Limit
+        - X-RateLimit-Remaining
+        - X-RateLimit-Reset
+      credentials: true
+      max_age: 3600
+      preflight_continue: false
+
+  # ── Global request transformer (forward metadata headers) ──────────────────
+  - name: request-transformer
+    config:
+      add:
+        headers:
+          - "x-forwarded-by:kong-gateway"
+      remove:
+        headers:
+          - x-kong-debug
+
+  # ── JWT on protected routes (auth endpoints excluded) ─────────────────────
+  - name: jwt
+    service: investors-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: assets-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: opportunities-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: deals-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: entities-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: products-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: issuances-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: subscriptions-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: listings-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: settlements-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: distributions-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: compliance-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: reports-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: documents-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: captables-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: notifications-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: wallets-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: prices-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: risks-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false
+
+  - name: jwt
+    service: proposals-service
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      run_on_preflight: false

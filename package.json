@@ -4,8 +4,7 @@
   "private": true,
   "description": "DAOS multi-tenant private capital market platform (sub-project 1: foundation + tenant/identity)",
   "scripts": {
-    "build": "nest build api-gateway && nest build tenant-identity && nest build investor-management && nest build asset-origination && nest build opportunity-engineering && nest build deal-studio && nest build legal-entity-studio && nest build product-design-studio && nest build issuance-studio && nest build document-management && nest build cap-table && nest build distribution && nest build marketplace && nest build settlement && nest build tenant-organization && nest build waterfall-engine && nest build pricing-valuation",
-    "start:gateway": "nest start api-gateway",
+    "build": "nest build tenant-identity && nest build investor-management && nest build asset-origination && nest build opportunity-engineering && nest build deal-studio && nest build legal-entity-studio && nest build product-design-studio && nest build issuance-studio && nest build document-management && nest build cap-table && nest build distribution && nest build marketplace && nest build settlement && nest build tenant-organization && nest build waterfall-engine && nest build pricing-valuation",
     "start:identity": "nest start tenant-identity",
     "start:investor": "nest start investor-management",
     "start:asset": "nest start asset-origination",
@@ -21,7 +20,7 @@
     "start:settlement": "nest start settlement",
     "start:waterfall": "nest start waterfall-engine",
     "start:pricing": "nest start pricing-valuation",
-    "start:dev": "concurrently -n identity,investor,gateway -c blue,green,yellow \"nest start tenant-identity --watch\" \"nest start investor-management --watch\" \"nest start api-gateway --watch\"",
+    "start:dev": "concurrently -n identity,investor -c blue,green \"nest start tenant-identity --watch\" \"nest start investor-management --watch\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

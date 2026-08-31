@@ -8,7 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { DealMetadataDto } from './deal-metadata.dto';
+import { DealMetadataDto } from './create-deal.dto';
 import { Percentage } from '@daos/shared-kernel';
 
 export class UpdateDealDto {
@@ -19,6 +19,10 @@ export class UpdateDealDto {
   @ApiPropertyOptional({ type: DealMetadataDto })
   @IsOptional() @ValidateNested() @Type(() => DealMetadataDto)
   metadata?: DealMetadataDto;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  economics?: unknown;
 
   @ApiPropertyOptional({ type: Percentage })
   @IsOptional() @IsString()

@@ -7,7 +7,7 @@ import {
 } from '@daos/shared-kernel';
 
 import { Deal } from '../domain/aggregates/deal.aggregate';
-import { TermSheet } from '../domain/entities/term-sheet.entity';
+import { TermSheet } from '../domain/aggregates/term-sheet.aggregate';
 
 export interface MoneyDto {
   amountMinorUnits: string;
@@ -16,10 +16,13 @@ export interface MoneyDto {
 
 export interface CapitalStackDto {
   tranches: {
-    trancheType: string;
-    amount: MoneyDto;
-    coupon: number;
+    trancheId: string;
+    name: string;
+    type: string;
+    currency: string;
+    targetAmount: MoneyDto;
     seniority: number;
+    ranking: number;
   }[];
 }
 
@@ -49,7 +52,7 @@ export interface TermSheetDto {
   economicRights: EconomicRights | null;
   vestingSchedule: TermSheet['vestingSchedule'];
   transferRestrictions: TermSheet['transferRestrictions'];
-  closingConditions: ClosingCondition[];
+  closingConditionIds: string[];
   status: string;
   finalizedAt: string | null;
   finalizedBy: string | null;
@@ -66,13 +69,16 @@ export function toDealDto(deal: Deal): DealDto {
     capitalStack: deal.capitalStack
       ? {
           tranches: deal.capitalStack.tranches.map((t) => ({
-            trancheType: t.trancheType,
-            amount: {
-              amountMinorUnits: t.amount.amount.toString(),
-              currency: t.amount.currency,
+            trancheId: t.trancheId,
+            name: t.name,
+            type: t.type,
+            currency: t.targetAmount.currency,
+            targetAmount: {
+              amountMinorUnits: t.targetAmount.amount.toString(),
+              currency: t.targetAmount.currency,
             },
-            coupon: t.coupon,
             seniority: t.seniority,
+            ranking: t.ranking,
           })),
         }
       : null,
@@ -96,7 +102,7 @@ export function toTermSheetDto(ts: TermSheet): TermSheetDto {
     economicRights: ts.economicRights,
     vestingSchedule: ts.vestingSchedule,
     transferRestrictions: ts.transferRestrictions,
-    closingConditions: ts.closingConditions,
+    closingConditionIds: ts.closingConditionIds,
     status: ts.status,
     finalizedAt: ts.finalizedAt,
     finalizedBy: ts.finalizedBy,

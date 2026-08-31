@@ -1,5 +1,16 @@
-import { PutAssetOnHoldCommand } from './put-asset-on-hold.command';
-import { PutAssetOnHoldDto } from '../dto/put-asset-on-hold.dto';
+import { AssetId, NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
+import { AssetRepository } from '../../domain/repositories/asset.repository';
+
+export class PutAssetOnHoldCommand {
+  constructor(
+    public readonly assetId: string,
+    public readonly reason: string,
+  ) {}
+}
 
 @CommandHandler(PutAssetOnHoldCommand)
 export class PutAssetOnHoldHandler implements ICommandHandler<PutAssetOnHoldCommand, { assetId: string }> {
@@ -9,10 +20,11 @@ export class PutAssetOnHoldHandler implements ICommandHandler<PutAssetOnHoldComm
 
   async execute(command: PutAssetOnHoldCommand): Promise<{ assetId: string }> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actor = TenantContextHolder.get().userId ?? tenantId.value;
     const asset = await this.assets.findById(tenantId, AssetId.create(command.assetId));
     if (!asset) throw new NotFoundError(`Asset not found: ${command.assetId}`);
 
-    asset.putOnHold('Put on hold by command handler');
+    asset.putOnHold(actor, command.reason);
     await this.assets.save(asset);
     return { assetId: asset.id.value };
   }

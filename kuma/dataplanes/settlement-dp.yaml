@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: settlement
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3012
+      tags:
+        kuma.io/service: settlement
+        kuma.io/protocol: http

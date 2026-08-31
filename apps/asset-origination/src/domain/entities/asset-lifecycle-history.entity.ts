@@ -36,6 +36,30 @@ export class AssetLifecycleHistory {
     );
   }
 
+  static reconstruct(params: {
+    id: string;
+    assetId: string;
+    tenantId: string;
+    previousStatus: string;
+    newStatus: string;
+    transitionReason: string | null;
+    changedBy: string;
+    changedAt: string;
+    metadata: Record<string, unknown> | null;
+  }): AssetLifecycleHistory {
+    return new AssetLifecycleHistory(
+      params.id,
+      params.assetId,
+      params.tenantId,
+      params.previousStatus,
+      params.newStatus,
+      params.transitionReason,
+      params.changedBy,
+      params.changedAt,
+      params.metadata,
+    );
+  }
+
   toDto() {
     return {
       id: this.id,

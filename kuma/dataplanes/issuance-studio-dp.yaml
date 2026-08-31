@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: issuance-studio
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3008
+      tags:
+        kuma.io/service: issuance-studio
+        kuma.io/protocol: http

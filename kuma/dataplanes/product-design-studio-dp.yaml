@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: product-design-studio
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3007
+      tags:
+        kuma.io/service: product-design-studio
+        kuma.io/protocol: http

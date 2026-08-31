@@ -1,5 +1,5 @@
 import { NotFoundError, TenantContextHolder, TenantId, CorrelationId } from '@daos/shared-kernel';
-import { Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { DealId } from '@daos/shared-kernel';

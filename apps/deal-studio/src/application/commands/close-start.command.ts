@@ -1,4 +1,4 @@
-import { DomainMetadata, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { DomainMetadata, DealId, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -20,7 +20,7 @@ export class CloseStartHandler implements ICommandHandler<CloseStartCommand, voi
   async execute(command: CloseStartCommand): Promise<void> {
     const { dealId, actorId } = command;
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
-    const deal = await this.deals.findById(tenantId, dealId);
+    const deal = await this.deals.findById(tenantId, DealId.create(dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${dealId}`);
 
     deal.startClosing(actorId, 'Closing process initiated');

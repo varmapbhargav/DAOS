@@ -6,10 +6,10 @@ import {
   DEAL_STATUS_TRANSITIONS,
   DealDocumentReference,
   DealEconomicsData,
+  DealEntityReference,
   DealId,
   DealMetadata,
   DealStatus,
-  EntityReference,
   EconomicRights,
   GovernanceTerms,
   OpportunityReference,
@@ -47,7 +47,7 @@ export class Deal extends AggregateRoot {
   private _participants: DealParticipant[] = [];
   private _documents: DealDocumentReference[] = [];
   private _assetReferences: AssetReference[] = [];
-  private _entityReferences: EntityReference[] = [];
+  private _entityReferences: DealEntityReference[] = [];
   private _opportunityReference: OpportunityReference | null = null;
 
   private constructor(
@@ -201,7 +201,7 @@ export class Deal extends AggregateRoot {
     participants: DealParticipant[];
     documents: DealDocumentReference[];
     assetReferences: AssetReference[];
-    entityReferences: EntityReference[];
+    entityReferences: DealEntityReference[];
     opportunityReference: OpportunityReference | null;
     version: number;
   }): Deal {
@@ -265,7 +265,7 @@ export class Deal extends AggregateRoot {
   get participants(): DealParticipant[] { return [...this._participants]; }
   get documents(): DealDocumentReference[] { return [...this._documents]; }
   get assetReferences(): AssetReference[] { return [...this._assetReferences]; }
-  get entityReferences(): EntityReference[] { return [...this._entityReferences]; }
+  get entityReferences(): DealEntityReference[] { return [...this._entityReferences]; }
   get opportunityReference(): OpportunityReference | null { return this._opportunityReference; }
 
   // ─── Private helpers ────────────────────────────────────────────────────────
@@ -504,6 +504,12 @@ export class Deal extends AggregateRoot {
 
   // ─── Metadata ───────────────────────────────────────────────────────────────
 
+  rename(name: string): void {
+    this.guardMutable();
+    this._name = name;
+    this.incrementVersion();
+  }
+
   updateMetadata(metadata: DealMetadata): void {
     this.guardMutable();
     this._metadata = metadata;
@@ -527,7 +533,7 @@ export class Deal extends AggregateRoot {
     }
   }
 
-  linkEntity(ref: EntityReference): void {
+  linkEntity(ref: DealEntityReference): void {
     this.guardMutable();
     const existing = this._entityReferences.find(
       (e) => e.entityId === ref.entityId && e.role === ref.role,

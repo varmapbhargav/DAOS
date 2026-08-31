@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: marketplace
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3010
+      tags:
+        kuma.io/service: marketplace
+        kuma.io/protocol: http

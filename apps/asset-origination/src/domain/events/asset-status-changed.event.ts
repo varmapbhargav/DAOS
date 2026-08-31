@@ -11,6 +11,6 @@ export class AssetStatusChanged extends DomainEvent {
     public readonly reason: string | null,
     public readonly actor: string,
   ) {
-    super();
+    super(assetId, tenantId);
   }
 }

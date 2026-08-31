@@ -9,6 +9,9 @@ import {
   Money,
   OriginationSource,
   ProvenanceRecord,
+  ScreeningCriteria,
+  ScreeningCriterionResult,
+  ScreeningDecision,
   TenantId,
   UtcInstant,
   ValuationMethodology,
@@ -21,15 +24,26 @@ import { AssetRejected } from '../events/asset-rejected.event';
 import { AssetStatusChanged } from '../events/asset-status-changed.event';
 import { DueDiligenceCompleted } from '../events/due-diligence-completed.event';
 import { ValuationUpdated } from '../events/valuation-updated.event';
-import { AssetLifecycleHistory, AssetLifecycleHistoryRepository } from '../entities/asset-lifecycle-history.entity';
-import { SponsorReference, SponsorReferenceRepository } from '../entities/sponsor-reference.entity';
-import { AssetId as AssetLifecycleId } from '@daos/shared-kernel';
+import { SponsorReference } from '../entities/sponsor-reference.entity';
+import { AssetQualificationResult } from '@daos/shared-kernel';
 
 export type AssetValuation = {
   fairValueMinorUnits: string;
   currency: string;
   methodology: ValuationMethodology;
   valuedAt: string | null;
+};
+
+export type AssetScreening = {
+  screeningId: string;
+  assetId: string;
+  criteriaResults: Record<string, ScreeningCriterionResult>;
+  decision: ScreeningDecision;
+  score: number;
+  maxScore: number;
+  comments: string;
+  reviewedBy: string;
+  reviewedAt: string;
 };
 
 // Valid state transitions map
@@ -50,7 +64,7 @@ const VALID_TRANSITIONS: Record<AssetOriginationStatus, AssetOriginationStatus[]
 };
 
 export class Asset extends AggregateRoot {
-private constructor(
+  private constructor(
     public readonly id: AssetId,
     public readonly tenantId: TenantId,
     private _name: string,
@@ -71,18 +85,9 @@ private constructor(
     private _internalReference: string | null,
     private _legalName: string,
     private _source: OriginationSource | null,
-    private _screening: {
-      screeningId: string;
-      assetId: string;
-      criteriaResults: Record<string, string>;
-      decision: ScreeningDecision;
-      score: number;
-      maxScore: number;
-      comments: string;
-      reviewedBy: string;
-      reviewedAt: string;
-    } | null,
+    private _screening: AssetScreening | null,
     private _qualification: AssetQualificationResult | null,
+    private _sponsorReference: SponsorReference | null,
   ) {
     super();
   }
@@ -122,7 +127,7 @@ private constructor(
       params.assetClass,
       params.assetSubClass,
       params.sponsorId,
-      'DRAFT',
+      'ORIGINATED',
       params.jurisdictions,
       params.country,
       params.purchasePrice ?? null,
@@ -136,6 +141,7 @@ private constructor(
       params.internalReference ?? null,
       params.legalName,
       source,
+      null,
       null,
       null,
     );
@@ -168,6 +174,7 @@ private constructor(
     source: OriginationSource | null;
     screening: AssetScreening | null;
     qualification: AssetQualificationResult | null;
+    sponsorReference?: SponsorReference | null;
   }): Asset {
     const asset = new Asset(
       params.id,
@@ -192,6 +199,7 @@ private constructor(
       params.source,
       params.screening,
       params.qualification,
+      params.sponsorReference ?? null,
     );
     asset._version = params.version;
     return asset;
@@ -205,6 +213,10 @@ private constructor(
     return this._assetClass;
   }
 
+  get assetSubClass(): AssetSubClass {
+    return this._assetSubClass;
+  }
+
   get sponsorId(): string {
     return this._sponsorId;
   }
@@ -215,6 +227,10 @@ private constructor(
 
   get jurisdictions(): string[] {
     return [...this._jurisdictions];
+  }
+
+  get country(): string {
+    return this._country;
   }
 
   get purchasePrice(): Money | null {
@@ -257,10 +273,6 @@ private constructor(
     return this._legalName;
   }
 
-  get country(): string {
-    return this._country;
-  }
-
   get source(): OriginationSource | null {
     return this._source;
   }
@@ -295,6 +307,20 @@ private constructor(
   }
 
   startScreening(actor: string): void {
+    if (this._status !== 'ORIGINATED') {
+      throw new Error('Asset must be in ORIGINATED status to start screening');
+    }
+    this._screening = {
+      screeningId: randomUUID(),
+      assetId: this.id.value,
+      criteriaResults: {},
+      decision: 'PASS',
+      score: 0,
+      maxScore: 0,
+      comments: '',
+      reviewedBy: actor,
+      reviewedAt: UtcInstant.now().toIso(),
+    };
     this.transitionTo('SCREENING', 'Screening started', actor);
   }
 
@@ -319,6 +345,9 @@ private constructor(
     if (this._status === 'REJECTED' || this._status === 'WITHDRAWN') {
       throw new Error('Cannot update valuation for rejected or withdrawn assets');
     }
+    if (this._status === 'APPROVED' || this._status === 'HANDED_OFF_TO_DEAL') {
+      throw new Error('Cannot update valuation for approved or handed-off assets');
+    }
     this._valuation = valuation;
     this.raise(
       new ValuationUpdated(
@@ -328,14 +357,16 @@ private constructor(
         valuation.methodology,
       ),
     );
-    this.transitionTo(this._status, 'Valuation updated', actor);
-    // Note: Status does NOT change to 'valuationUpdated' - that was the bug
-    // Status remains in current state, valuation is just updated
+    // Valuation does not change asset lifecycle status (AO-000).
     this.incrementVersion();
   }
 
   startRiskReview(actor: string): void {
     this.transitionTo('RISK_REVIEW', 'Risk review started', actor);
+  }
+
+  completeRiskReview(actor: string): void {
+    this.transitionTo('READY_FOR_APPROVAL', 'Risk review completed', actor);
   }
 
   submitForApproval(actor: string): void {
@@ -391,9 +422,6 @@ private constructor(
       throw new Error('Cannot withdraw approved or handed-off assets');
     }
     this.transitionTo('WITHDRAWN', reason, actor);
-    this.sponsorRefRepo.save(
-      this._sponsorReference!,
-    );
   }
 
   handoffToDeal(actor: string): void {
@@ -403,141 +431,101 @@ private constructor(
     this.transitionTo('HANDED_OFF_TO_DEAL', 'Handed off to Deal Studio', actor);
   }
 
-  startScreening(actor: string): void {
-    if (this._status !== 'DRAFT') {
-      throw new Error('Asset must be in DRAFT status to start screening');
-    }
-    this._screening = {
-      screeningId: randomUUID(),
-      assetId: this.id.value,
-      criteriaResults: {},
-      decision: 'PASS',
-      score: 0,
-      maxScore: 0,
-      comments: '',
-      reviewedBy: actor,
-      reviewedAt: UtcInstant.now(),
-    };
-    this.transitionTo('SCREENING', 'Screening started', actor);
-  }
-
   completeScreening(actor: string, criteriaResult: ScreeningCriteria): void {
     if (this._status !== 'SCREENING') {
       throw new Error('Asset must be in SCREENING status to complete screening');
     }
-    // Calculate score and decision based on criteria
     let totalScore = 0;
     let maxScore = 0;
     const criteriaResults: Record<string, ScreeningCriterionResult> = {};
-    
-    // Asset class eligibility
-    if (this._assetClass in criteriaResult.assetClassEligibility) {
+
+    if (criteriaResult.assetClassEligibility && this._assetClass in criteriaResult.assetClassEligibility) {
       const passes = criteriaResult.assetClassEligibility[this._assetClass];
       criteriaResults['assetClassEligibility'] = passes ? 'PASS' : 'FAIL';
       if (passes) { totalScore++; }
       maxScore++;
     }
-    
-    // Jurisdiction eligibility
+
     for (const jurisdiction of this._jurisdictions) {
-      if (jurisdiction in criteriaResult.jurisdictionEligibility) {
+      if (criteriaResult.jurisdictionEligibility && jurisdiction in criteriaResult.jurisdictionEligibility) {
         const passes = criteriaResult.jurisdictionEligibility[jurisdiction];
-        const key = `jurisdiction:${jurisdiction}`;
-        criteriaResults[key] = passes ? 'PASS' : 'FAIL';
+        criteriaResults[`jurisdiction:${jurisdiction}`] = passes ? 'PASS' : 'FAIL';
         if (passes) { totalScore++; }
         maxScore++;
       }
     }
-    
-    // Minimum asset value
+
     if (criteriaResult.minimumAssetValue && this._purchasePrice) {
       const passes = this._purchasePrice.amount >= criteriaResult.minimumAssetValue.amount;
       criteriaResults['minimumAssetValue'] = passes ? 'PASS' : 'FAIL';
       if (passes) { totalScore++; }
       maxScore++;
     }
-    
-    // Maximum asset value
+
     if (criteriaResult.maximumAssetValue && this._purchasePrice) {
       const passes = this._purchasePrice.amount <= criteriaResult.maximumAssetValue.amount;
       criteriaResults['maximumAssetValue'] = passes ? 'PASS' : 'FAIL';
       if (passes) { totalScore++; }
       maxScore++;
     }
-    
-    // Minimum expected return
+
     if (criteriaResult.minimumExpectedReturn !== undefined) {
-      const passes = /* expected return check */ true; // placeholder
-      criteriaResults['minimumExpectedReturn'] = passes ? 'PASS' : 'FAIL';
-      if (passes) { totalScore++; }
+      criteriaResults['minimumExpectedReturn'] = 'NOT_APPLICABLE';
       maxScore++;
     }
-    
-    // Sponsor eligibility
-    for (const [sponsorId, passes] of Object.entries(criteriaResult.sponsorEligibility)) {
-      criteriaResults[`sponsor:${sponsorId}`] = passes ? 'PASS' : 'FAIL';
-      if (passes) { totalScore++; }
-      maxScore++;
+
+    if (criteriaResult.sponsorEligibility) {
+      for (const [sponsorId, passes] of Object.entries(criteriaResult.sponsorEligibility)) {
+        criteriaResults[`sponsor:${sponsorId}`] = passes ? 'PASS' : 'FAIL';
+        if (passes) { totalScore++; }
+        maxScore++;
+      }
     }
-    
-    // Regulatory restrictions
-    for (const restriction of criteriaResult.regulatoryRestrictions) {
+
+    for (const restriction of criteriaResult.regulatoryRestrictions ?? []) {
       criteriaResults[`regulatory:${restriction}`] = 'NOT_APPLICABLE';
-    }
-    if (criteriaResult.regulatoryRestrictions.length > 0) {
-      maxScore += criteriaResult.regulatoryRestrictions.length;
-    }
-    
-    // ESG restrictions
-    for (const restriction of criteriaResult.esgRestrictions) {
-      criteriaResults[`esg:${restriction}`] = 'NOT_APPLICABLE';
-    }
-    if (criteriaResult.esgRestrictions.length > 0) {
-      maxScore += criteriaResult.esgRestrictions.length;
-    }
-    
-    // Liquidity requirements
-    if (criteriaResult.liquidityRequirements.minimumDailyLiquidity && this._purchasePrice) {
-      const passes = this._purchasePrice.amount >= criteriaResult.liquidityRequirements.minimumDailyLiquidity.amount;
-      criteriaResults['liquidity'] = passes ? 'PASS' : 'FAIL';
-      if (passes) { totalScore++; }
       maxScore++;
     }
-    
-    // Tenant investment mandates
-    for (const mandate of criteriaResult.tenantInvestmentMandates) {
+
+    for (const restriction of criteriaResult.esgRestrictions ?? []) {
+      criteriaResults[`esg:${restriction}`] = 'NOT_APPLICABLE';
+      maxScore++;
+    }
+
+    if (criteriaResult.liquidityRequirements) {
+      const minLiquidity = criteriaResult.liquidityRequirements.minimumDailyLiquidity;
+      if (minLiquidity && this._purchasePrice) {
+        const passes = this._purchasePrice.amount >= minLiquidity.amount;
+        criteriaResults['liquidity'] = passes ? 'PASS' : 'FAIL';
+        if (passes) { totalScore++; }
+        maxScore++;
+      }
+    }
+
+    for (const mandate of criteriaResult.tenantInvestmentMandates ?? []) {
       criteriaResults[`mandate:${mandate}`] = 'NOT_APPLICABLE';
+      maxScore++;
     }
-    if (criteriaResult.tenantInvestmentMandates.length > 0) {
-      maxScore += criteriaResult.tenantInvestmentMandates.length;
-    }
-    
+
     const decision: ScreeningDecision = maxScore > 0 && totalScore / maxScore >= 0.75 ? 'PASS' : 'FAIL';
-    const score = totalScore;
-    const maxScoreValue = maxScore;
-    
+
     this._screening = {
       screeningId: randomUUID(),
       assetId: this.id.value,
       criteriaResults,
       decision,
-      score,
-      maxScore: maxScoreValue,
+      score: totalScore,
+      maxScore,
       comments: 'Screening completed',
       reviewedBy: actor,
-      reviewedAt: UtcInstant.now(),
+      reviewedAt: UtcInstant.now().toIso(),
     };
-    
+
     if (decision === 'PASS') {
       this.qualify(actor);
     } else {
       this.reject('Screening failed: criteria not met', actor);
     }
   }
+}
 
-  withdraw(actor: string, reason: string): void {
-    if (this._status === 'APPROVED' || this._status === 'HANDED_OFF_TO_DEAL') {
-      throw new Error('Cannot withdraw approved or handed-off assets');
-    }
-    this.transitionTo('WITHDRAWN', reason, actor);
-  }

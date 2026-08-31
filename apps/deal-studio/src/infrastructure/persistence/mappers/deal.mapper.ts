@@ -6,11 +6,11 @@ import {
   ClosingCondition,
   DealDocumentReference,
   DealEconomicsData,
+  DealEntityReference,
   DealId,
   DealMetadata,
   DealStatus,
   EconomicRights,
-  EntityReference,
   GovernanceTerms,
   Money,
   OpportunityReference,
@@ -91,7 +91,7 @@ export class DealMapper {
       participants: [],   // loaded separately
       documents: e.documents as unknown as DealDocumentReference[],
       assetReferences: e.assetReferences as unknown as AssetReference[],
-      entityReferences: e.entityReferences as unknown as EntityReference[],
+      entityReferences: e.entityReferences as unknown as DealEntityReference[],
       opportunityReference: e.opportunityReference as unknown as OpportunityReference | null,
       version: e.version,
     });

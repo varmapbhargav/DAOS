@@ -1,13 +1,27 @@
-import { CreateAssetDraftDto } from '../dto/create-asset-draft.dto';
-import { AssetClass, Collateral, Money, OutboxPublisher, ProvenanceRecord, TenantContextHolder, TenantId, UtcInstant, AssetId } from '@daos/shared-kernel';
+import {
+  AssetClass,
+  AssetSubClass,
+  Collateral,
+  Money,
+  OutboxPublisher,
+  ProvenanceRecord,
+  TenantContextHolder,
+  TenantId,
+  UtcInstant,
+} from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Asset } from '../../domain/aggregates/asset.aggregate';
 import { ASSET_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
-import { CreateAssetDraftCommand } from './create-asset-draft.command';
+import { CreateAssetDraftDto } from '../dto/asset-action.dto';
 
+export class CreateAssetDraftCommand {
+  constructor(public readonly dto: CreateAssetDraftDto) {}
+}
+
+@CommandHandler(CreateAssetDraftCommand)
 export class CreateAssetDraftHandler implements ICommandHandler<CreateAssetDraftCommand, { assetId: string }> {
   constructor(
     @Inject(ASSET_REPOSITORY) private readonly assets: AssetRepository,
@@ -17,15 +31,13 @@ export class CreateAssetDraftHandler implements ICommandHandler<CreateAssetDraft
   async execute(command: CreateAssetDraftCommand): Promise<{ assetId: string }> {
     const dto = command.dto;
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actor = TenantContextHolder.get().userId ?? tenantId.value;
 
     const collateral: Collateral[] = (dto.collateral ?? []).map((c) => ({
       type: c.type,
       description: c.description,
-      estimatedValue: Money.of(
-        BigInt(c.estimatedValueMinorUnits ?? 0),
-        'USD',
-      ),
-      lienPosition: c.lienPosition,
+      estimatedValue: Money.of(BigInt(c.estimatedValueMinorUnits ?? 0), 'USD'),
+      lienPosition: c.lienPosition ?? 0,
     }));
 
     const provenance: ProvenanceRecord[] = (dto.provenance ?? []).map((p) => ({
@@ -35,22 +47,21 @@ export class CreateAssetDraftHandler implements ICommandHandler<CreateAssetDraft
       priorOwners: p.priorOwners ?? [],
     }));
 
-    const asset = Asset.reconstruct({
-      id: AssetId.create(),
+    const asset = Asset.originate({
       tenantId,
       name: dto.name,
       assetClass: dto.assetClass as AssetClass,
-      sponsorId: dto.sponsorId,
-      status: 'DRAFT' as const,
+      assetSubClass: 'residential' as AssetSubClass,
+      sponsorId: dto.sponsorId ?? 'unknown',
+      legalName: dto.name,
+      country: dto.country ?? '',
       jurisdictions: dto.jurisdictions ?? [],
-      purchasePrice: null,
-      collateral: [],
-      provenance: [],
-      valuation: null,
-      dueDiligenceRating: null,
-      approvedBy: null,
-      rejectionReason: null,
-      version: 0,
+      purchasePrice:
+        dto.purchasePriceMinorUnits !== undefined && dto.purchasePriceCurrency
+          ? Money.of(BigInt(dto.purchasePriceMinorUnits), dto.purchasePriceCurrency)
+          : null,
+      collateral,
+      provenance,
     });
 
     await this.assets.save(asset);

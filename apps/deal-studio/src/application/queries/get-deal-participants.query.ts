@@ -25,7 +25,7 @@ export class GetDealParticipantsHandler implements IQueryHandler<GetDealParticip
       entityId: p.entityId,
       role: p.role,
       status: p.status,
-      addedAt: p.createdAt,
+      addedAt: p.effectiveFrom,
     }));
   }
 }

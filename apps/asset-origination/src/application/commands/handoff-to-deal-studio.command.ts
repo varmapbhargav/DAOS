@@ -1,5 +1,13 @@
-import { HandoffToDealStudioCommand } from './handoff-to-deal-studio.command';
-import { HandoffToDealStudioDto } from '../dto/handoff-to-deal-studio.dto';
+import { AssetId, NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
+import { AssetRepository } from '../../domain/repositories/asset.repository';
+
+export class HandoffToDealStudioCommand {
+  constructor(public readonly assetId: string) {}
+}
 
 @CommandHandler(HandoffToDealStudioCommand)
 export class HandoffToDealStudioHandler implements ICommandHandler<HandoffToDealStudioCommand, { assetId: string }> {
@@ -9,10 +17,11 @@ export class HandoffToDealStudioHandler implements ICommandHandler<HandoffToDeal
 
   async execute(command: HandoffToDealStudioCommand): Promise<{ assetId: string }> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actor = TenantContextHolder.get().userId ?? tenantId.value;
     const asset = await this.assets.findById(tenantId, AssetId.create(command.assetId));
     if (!asset) throw new NotFoundError(`Asset not found: ${command.assetId}`);
 
-    asset.handoffToDeal('Handed off to Deal Studio by command handler');
+    asset.handoffToDeal(actor);
     await this.assets.save(asset);
     return { assetId: asset.id.value };
   }

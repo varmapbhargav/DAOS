@@ -42,3 +42,12 @@ export class RoleId extends DomainId {
     return new RoleId(value ?? randomUUID());
   }
 }
+
+export class CorrelationId extends DomainId {
+  private constructor(value: string) {
+    super(value);
+  }
+  static create(value?: string): CorrelationId {
+    return new CorrelationId(value ?? randomUUID());
+  }
+}

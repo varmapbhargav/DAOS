@@ -35,7 +35,7 @@ export class GetDealTimelineHandler implements IQueryHandler<GetDealTimelineQuer
         entityId: p.entityId,
         role: p.role,
         status: p.status,
-        addedAt: p.createdAt,
+        addedAt: p.effectiveFrom,
       })),
     };
   }

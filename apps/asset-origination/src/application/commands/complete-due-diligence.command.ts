@@ -1,5 +1,17 @@
-import { CompleteDueDiligenceCommand } from './complete-due-diligence.command';
-import { CompleteDueDiligenceDto } from '../dto/complete-due-diligence.dto';
+import { AssetId, DDRating, NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
+import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { CompleteDueDiligenceDto } from '../dto/asset-action.dto';
+
+export class CompleteDueDiligenceCommand {
+  constructor(
+    public readonly assetId: string,
+    public readonly dto: CompleteDueDiligenceDto,
+  ) {}
+}
 
 @CommandHandler(CompleteDueDiligenceCommand)
 export class CompleteDueDiligenceHandler implements ICommandHandler<CompleteDueDiligenceCommand, { assetId: string }> {
@@ -9,12 +21,12 @@ export class CompleteDueDiligenceHandler implements ICommandHandler<CompleteDueD
 
   async execute(command: CompleteDueDiligenceCommand): Promise<{ assetId: string }> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actor = command.dto.completedBy || TenantContextHolder.get().userId || tenantId.value;
     const asset = await this.assets.findById(tenantId, AssetId.create(command.assetId));
     if (!asset) throw new NotFoundError(`Asset not found: ${command.assetId}`);
 
-    // Rating would come from the DTO, for now use a default
-    const rating: DDRating = 'BBB';
-    asset.completeDueDiligence(rating, 'Due diligence completed by command handler');
+    const rating = command.dto.rating as DDRating;
+    asset.completeDueDiligence(rating, actor);
     await this.assets.save(asset);
     return { assetId: asset.id.value };
   }

@@ -1,6 +1,6 @@
-import { ScenarioId, TenantId } from '@daos/shared-kernel';
+import { CashFlowPeriod, ScenarioId, TenantId } from '@daos/shared-kernel';
 
-import { Scenario } from '../../../domain/entities/scenario.entity';
+import { Scenario, ScenarioAssumptions, ScenarioResult } from '../../../domain/entities/scenario.entity';
 import { ScenarioOrmEntity } from '../entities/scenario.orm-entity';
 
 export class ScenarioMapper {
@@ -11,12 +11,12 @@ export class ScenarioMapper {
       tenantId: e.tenantId,
       type: e.type as 'BASE' | 'BULL' | 'BEAR' | 'STRESS',
       name: e.name,
-      assumptions: e.assumptions as object,
-      cashFlowPeriods: e.cashFlowPeriods as object[],
-      result: e.result as object | null,
+      assumptions: e.assumptions as ScenarioAssumptions,
+      cashFlowPeriods: e.cashFlowPeriods as unknown as CashFlowPeriod[],
+      result: (e.result as ScenarioResult | null) ?? null,
       version: e.version,
       createdBy: e.createdBy,
-      createdAt: e.createdAt,
+      createdAt: e.createdAt.toISOString(),
     });
   }
 

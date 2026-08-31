@@ -51,7 +51,7 @@ export class PostgresAssetRepository implements AssetRepository {
       if (asset.sponsorReference) {
         const refOrm = new SponsorReferenceOrmEntity();
         refOrm.id = asset.sponsorReference.id;
-        refOrm.entityId = asset.id; // Using asset id as entityId for now
+        refOrm.entityId = asset.id.value;
         refOrm.tenantId = asset.tenantId.value;
         refOrm.name = asset.sponsorReference.name;
         refOrm.jurisdiction = asset.sponsorReference.jurisdiction;

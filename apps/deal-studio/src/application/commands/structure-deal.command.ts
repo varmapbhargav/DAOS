@@ -1,5 +1,6 @@
 import {
   CapitalStack,
+  CapitalTranche,
   Money,
   OutboxPublisher,
   TenantContextHolder,
@@ -9,7 +10,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Deal } from '../../domain/aggregates/deal.aggregate';
-import { TermSheet } from '../../domain/entities/term-sheet.entity';
+import { TermSheet } from '../../domain/aggregates/term-sheet.aggregate';
 import {
   DEAL_REPOSITORY,
   OUTBOX_PUBLISHER,
@@ -35,13 +36,38 @@ export class StructureDealHandler implements ICommandHandler<StructureDealComman
     const dto = command.dto;
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
 
+    const trancheTypeMap: Record<string, CapitalTranche['type']> = {
+      senior: 'SENIOR_DEBT',
+      mezzanine: 'MEZZANINE_DEBT',
+      juniorDebt: 'JUNIOR_DEBT',
+      preferredEquity: 'PREFERRED_EQUITY',
+      commonEquity: 'COMMON_EQUITY',
+    };
+
     const capitalStack: CapitalStack | undefined = dto.capitalStack
       ? {
-          tranches: dto.capitalStack.tranches.map((t) => ({
-            trancheType: t.trancheType as CapitalStack['tranches'][number]['trancheType'],
-            amount: Money.of(BigInt(t.amountMinorUnits), t.amountCurrency),
-            coupon: t.coupon,
+          tranches: dto.capitalStack.tranches.map((t, index) => ({
+            trancheId: `tr-${index + 1}`,
+            name: t.trancheType,
+            type: trancheTypeMap[t.trancheType] ?? 'SENIOR_DEBT',
+            currency: t.amountCurrency,
+            targetAmount: Money.of(BigInt(t.amountMinorUnits), t.amountCurrency),
+            committedAmount: null,
+            fundedAmount: null,
             seniority: t.seniority,
+            ranking: index + 1,
+            economics: {
+              interestRateType: 'FIXED',
+              fixedRate: null,
+              floatingReferenceRate: null,
+              spread: null,
+              couponFrequency: 'ANNUAL',
+              maturityDate: null,
+              gracePeriodMonths: 0,
+              amortizationType: 'BULLET',
+              defaultInterestRate: null,
+              pikAllowed: false,
+            },
           })),
         }
       : undefined;
@@ -57,6 +83,7 @@ export class StructureDealHandler implements ICommandHandler<StructureDealComman
     const termSheet = TermSheet.create({
       tenantId,
       dealId: deal.id.value,
+      createdBy: TenantContextHolder.get().userId ?? 'system',
     });
 
     await this.deals.save(deal);

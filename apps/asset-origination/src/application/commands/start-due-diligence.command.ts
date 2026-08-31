@@ -1,5 +1,13 @@
-import { StartDueDiligenceCommand } from './start-due-diligence.command';
-import { StartDueDiligenceDto } from '../dto/start-due-diligence.dto';
+import { AssetId, NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
+import { AssetRepository } from '../../domain/repositories/asset.repository';
+
+export class StartDueDiligenceCommand {
+  constructor(public readonly assetId: string) {}
+}
 
 @CommandHandler(StartDueDiligenceCommand)
 export class StartDueDiligenceHandler implements ICommandHandler<StartDueDiligenceCommand, { assetId: string }> {
@@ -9,10 +17,11 @@ export class StartDueDiligenceHandler implements ICommandHandler<StartDueDiligen
 
   async execute(command: StartDueDiligenceCommand): Promise<{ assetId: string }> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
+    const actor = TenantContextHolder.get().userId ?? tenantId.value;
     const asset = await this.assets.findById(tenantId, AssetId.create(command.assetId));
     if (!asset) throw new NotFoundError(`Asset not found: ${command.assetId}`);
 
-    asset.startDueDiligence('Due diligence started by command handler');
+    asset.startDueDiligence(actor);
     await this.assets.save(asset);
     return { assetId: asset.id.value };
   }

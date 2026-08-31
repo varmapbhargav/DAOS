@@ -1,6 +1,7 @@
 export * from './aggregate-root';
 export * from './domain-event';
 export * from './errors';
+export * from './deal-role.constants';
 export * from './ids/domain-id';
 export * from './ids/investor.ids';
 export * from './ids/asset.ids';

@@ -1,4 +1,4 @@
-import { DomainMetadata, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { DealMetadata, DealId, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -21,11 +21,11 @@ export class UpdateDealHandler implements ICommandHandler<UpdateDealCommand, voi
   async execute(command: UpdateDealCommand): Promise<void> {
     const { dealId, dto } = command;
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
-    const deal = await this.deals.findById(tenantId, dealId);
+    const deal = await this.deals.findById(tenantId, DealId.create(dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${dealId}`);
 
-    if (dto.name !== undefined) deal._name = dto.name;
-    if (dto.metadata !== undefined) deal.updateMetadata(dto.metadata as DealMetadata);
+    if (dto.name !== undefined) deal.rename(dto.name);
+    if (dto.metadata !== undefined) deal.updateMetadata(dto.metadata as unknown as DealMetadata);
     if (dto.economics !== undefined) deal.updateEconomics(dto.economics as any);
 
     await this.deals.save(deal);

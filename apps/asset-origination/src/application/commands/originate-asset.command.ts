@@ -1,5 +1,6 @@
 import {
   AssetClass,
+  AssetSubClass,
   Collateral,
   Money,
   OutboxPublisher,
@@ -52,7 +53,12 @@ export class OriginateAssetHandler implements ICommandHandler<OriginateAssetComm
       tenantId,
       name: dto.name,
       assetClass: dto.assetClass as AssetClass,
+      assetSubClass: (dto.assetSubClass ?? dto.assetClass) as AssetSubClass,
       sponsorId: dto.sponsorId,
+      legalName: dto.legalName ?? dto.name,
+      country: dto.country ?? '',
+      externalReference: dto.externalReference,
+      internalReference: dto.internalReference,
       jurisdictions: dto.jurisdictions ?? [],
       purchasePrice:
         dto.purchasePriceMinorUnits !== undefined && dto.purchasePriceCurrency

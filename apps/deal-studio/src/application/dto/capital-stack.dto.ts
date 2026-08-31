@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  IsArray, IsBoolean, IsEnum, IsISO8601, IsInt,
+  IsArray, IsBoolean, IsEnum, IsISO8601, IsInt, IsOptional,
   IsString, Min, MinLength, ValidateNested,
 } from 'class-validator';
 import { Percentage } from '@daos/shared-kernel';

@@ -26,8 +26,8 @@ export class GetDealSummaryHandler implements IQueryHandler<GetDealSummaryQuery,
       name: deal.name,
       status: deal.status,
       version: deal.version,
-      createdAt: deal.created_at,
-      updatedAt: deal.updated_at,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
   }
 }

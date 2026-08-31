@@ -1,0 +1,13 @@
+type: Mesh
+name: default
+mtls:
+  enabledBackend: builtin
+  backends:
+    - name: builtin
+      type: builtin
+      dpCert:
+        rotation:
+          expiration: 24h
+      conf:
+        caCert:
+          RSAbits: 2048

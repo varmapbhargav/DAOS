@@ -72,6 +72,11 @@ export class OriginateAssetDto {
   @IsString()
   legalName!: string;
 
+  @ApiPropertyOptional({ example: 'GB' })
+  @IsOptional()
+  @IsString()
+  country?: string;
+
   @ApiPropertyOptional({ example: 'EXT-REF-12345' })
   @IsOptional()
   @IsString()

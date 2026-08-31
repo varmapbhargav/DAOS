@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: compliance
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3013
+      tags:
+        kuma.io/service: compliance
+        kuma.io/protocol: http

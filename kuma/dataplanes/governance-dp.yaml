@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: governance
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3020
+      tags:
+        kuma.io/service: governance
+        kuma.io/protocol: http

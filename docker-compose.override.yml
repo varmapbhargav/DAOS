@@ -1,7 +1,7 @@
 version: '3.9'
 
 # Development overrides — not committed to production deployments.
-# Enables local port exposure for direct DB/cache access from dev tools.
+# Exposes additional ports for direct debugging with sidecars.
 
 services:
   postgres:
@@ -16,5 +16,13 @@ services:
 
   kafka:
     environment:
-      # Allow larger message sizes in dev
       KAFKA_MESSAGE_MAX_BYTES: 10485760
+
+  kong-gateway:
+    ports:
+      - '8002:8002'
+
+  kuma-cp:
+    ports:
+      - '5681:5681'
+      - '5680:5680'

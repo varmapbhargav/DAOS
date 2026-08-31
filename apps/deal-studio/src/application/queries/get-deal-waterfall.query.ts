@@ -4,9 +4,9 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { DealId } from '@daos/shared-kernel';
 
-import { DEAL_REPOSITORY } from '../../domain/repositories/repository.tokens';
+import { DEAL_REPOSITORY, DISTRIBUTION_WATERFALL_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { DealRepository } from '../../domain/repositories/deal.repository';
-import { DealDto, toDealDto } from '../deal.mapper';
+import { DistributionWaterfallRepository } from '../../domain/repositories/distribution-waterfall.repository';
 
 export class GetDealWaterfallQuery {
   constructor(public readonly dealId: string) {}
@@ -14,20 +14,23 @@ export class GetDealWaterfallQuery {
 
 @QueryHandler(GetDealWaterfallQuery)
 export class GetDealWaterfallHandler implements IQueryHandler<GetDealWaterfallQuery, any> {
-  constructor(@Inject(DEAL_REPOSITORY) private readonly deals: DealRepository) {}
+  constructor(
+    @Inject(DEAL_REPOSITORY) private readonly deals: DealRepository,
+    @Inject(DISTRIBUTION_WATERFALL_REPOSITORY) private readonly waterfallRepo: DistributionWaterfallRepository,
+  ) {}
 
   async execute(query: GetDealWaterfallQuery): Promise<any> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
     const deal = await this.deals.findById(tenantId, DealId.create(query.dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${query.dealId}`);
 
-    // Return waterfall distribution data from the deal's distribution
-    const distribution = deal.distribution || null;
+    const distribution = await this.waterfallRepo.findByDealId(tenantId, deal.id.value);
 
     return {
       dealId: deal.id.value,
-      distributions: distribution
-        ? distribution.distributions.map((d) => ({
+      tiers: distribution
+        ? distribution.tiers.map((d) => ({
+            tierId: d.tierId,
             priority: d.priority,
             recipient: d.recipient,
             distributionType: d.distributionType,
@@ -37,7 +40,7 @@ export class GetDealWaterfallHandler implements IQueryHandler<GetDealWaterfallQu
                   currency: d.thresholdAmount.currency,
                 }
               : null,
-            hurdleRate: d.hurdleRate?.toFraction() ?? null,
+            hurdleRate: d.hurdleRate ?? null,
             allocationPercentage: d.allocationPercentage,
             catchUpApplies: d.catchUpApplies,
             catchUpPercentage: d.catchUpPercentage ?? null,

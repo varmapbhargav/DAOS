@@ -11,8 +11,9 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { DealId } from '@daos/shared-kernel';
 
-import { DEAL_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
+import { DEAL_REPOSITORY, OUTBOX_PUBLISHER, CLOSING_CONDITION_CHECKER } from '../../domain/repositories/repository.tokens';
 import { DealRepository } from '../../domain/repositories/deal.repository';
+import { ClosingConditionChecker } from '../../domain/services/closing-condition-checker';
 import { CloseDealDto } from '../dto/deal-action.dto';
 
 export class CloseDealCommand {
@@ -27,6 +28,7 @@ export class CloseDealHandler implements ICommandHandler<CloseDealCommand, { sta
   constructor(
     @Inject(DEAL_REPOSITORY) private readonly deals: DealRepository,
     @Inject(OUTBOX_PUBLISHER) private readonly outbox: OutboxPublisher,
+    @Inject(CLOSING_CONDITION_CHECKER) private readonly checker: ClosingConditionChecker,
   ) {}
 
   async execute(command: CloseDealCommand): Promise<{ status: string }> {
@@ -42,7 +44,7 @@ export class CloseDealHandler implements ICommandHandler<CloseDealCommand, { sta
     const deal = await this.deals.findById(tenantId, DealId.create(command.dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${command.dealId}`);
 
-    deal.close(actorId);
+    deal.close(actorId, this.checker);
     await this.deals.save(deal);
     await this.outbox.publish(deal.pullEvents());
     return { status: deal.status };

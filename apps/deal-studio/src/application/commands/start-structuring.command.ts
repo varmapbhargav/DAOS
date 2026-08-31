@@ -1,4 +1,4 @@
-import { DomainMetadata, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { DomainMetadata, DealId, NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
@@ -21,7 +21,7 @@ export class StartStructuringHandler implements ICommandHandler<StartStructuring
   async execute(command: StartStructuringCommand): Promise<void> {
     const { dealId, actorId, reason } = command;
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
-    const deal = await this.deals.findById(tenantId, dealId);
+    const deal = await this.deals.findById(tenantId, DealId.create(dealId));
     if (!deal) throw new NotFoundError(`Deal not found: ${dealId}`);
 
     deal.startStructuring(actorId, reason ?? 'Structuring started');

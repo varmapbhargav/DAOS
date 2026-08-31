@@ -4,9 +4,8 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { AssetLifecycleHistory } from '../../domain/entities/asset-lifecycle-history.entity';
-import { AssetLifecycleHistoryOrmEntity } from '../entities/asset-lifecycle-history.orm-entity';
+import { AssetLifecycleHistoryOrmEntity } from './entities/asset-lifecycle-history.orm-entity';
 import { AssetLifecycleHistoryRepository } from '../../domain/repositories/asset-lifecycle-history.repository';
-import { AssetMapper } from './mappers/asset.mapper';
 
 @Injectable()
 export class PostgresAssetLifecycleHistoryRepository implements AssetLifecycleHistoryRepository {
@@ -21,8 +20,8 @@ export class PostgresAssetLifecycleHistoryRepository implements AssetLifecycleHi
     orm.newStatus = history.newStatus;
     orm.transitionReason = history.transitionReason;
     orm.changedBy = history.changedBy;
-    orm.changedAt = history.changedAt;
-    orm.metadata = history.metadata;
+    orm.changedAt = new Date(history.changedAt);
+    orm.metadata = (history.metadata ?? {}) as object;
 
     await this.ds.transaction(async (manager) => {
       await manager.query(`SET LOCAL app.tenant_id = '${history.tenantId}'`);
@@ -47,16 +46,18 @@ export class PostgresAssetLifecycleHistoryRepository implements AssetLifecycleHi
         .getRepository(AssetLifecycleHistoryOrmEntity)
         .find({ where: { assetId: assetId.value, tenantId: tenantId.value }, order: { changedAt: 'DESC' } });
     });
-    return entities.map((e) => ({
-      id: e.id,
-      assetId: e.assetId,
-      tenantId: e.tenantId,
-      previousStatus: e.previousStatus,
-      newStatus: e.newStatus,
-      transitionReason: e.transitionReason,
-      changedBy: e.changedBy,
-      changedAt: e.changedAt.toISOString(),
-      metadata: e.metadata,
-    }));
+    return entities.map((e) =>
+      AssetLifecycleHistory.reconstruct({
+        id: e.id,
+        assetId: e.assetId,
+        tenantId: e.tenantId,
+        previousStatus: e.previousStatus,
+        newStatus: e.newStatus,
+        transitionReason: e.transitionReason,
+        changedBy: e.changedBy,
+        changedAt: e.changedAt.toISOString(),
+        metadata: (e.metadata ?? null) as Record<string, unknown> | null,
+      }),
+    );
   }
 }

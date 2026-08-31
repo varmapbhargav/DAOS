@@ -2,9 +2,11 @@ import {
   AssetClass,
   AssetId,
   AssetOriginationStatus,
+  AssetSubClass,
   Collateral,
   DDRating,
   Money,
+  OriginationSource,
   ProvenanceRecord,
   TenantId,
   UtcInstant,
@@ -13,7 +15,7 @@ import {
 
 import { Asset } from '../../../domain/aggregates/asset.aggregate';
 import { AssetOrmEntity } from '../entities/asset.orm-entity';
-import { SponsorReferenceOrmEntity } from '../entities/sponsor-reference.orm-entity';
+import { SponsorReference } from '../../../domain/entities/sponsor-reference.entity';
 
 type CollateralJson = {
   type: string;
@@ -45,14 +47,40 @@ export class AssetMapper {
       priorOwners: p.priorOwners,
     }));
 
+    const source = e.source as unknown as {
+      sourceId: string;
+      sourceType: string;
+      sourceEntityId: string;
+      sourceReference: string;
+      originatedAt: string;
+      submittedBy: string;
+      relationshipManager: string;
+    } | null;
+
+    let sponsorReference: SponsorReference | null = null;
+    if (e.sponsorReferencesId) {
+      sponsorReference = SponsorReference.reconstruct({
+        id: e.sponsorReferencesId,
+        entityId: e.sponsorReferencesEntityId ?? e.id,
+        tenantId: e.tenantId,
+        name: e.sponsorReferencesName ?? '',
+        jurisdiction: e.sponsorReferencesJurisdiction ?? '',
+        relationshipStatus: e.sponsorReferencesRelationshipStatus ?? '',
+        riskRating: e.sponsorReferencesRiskRating ?? '',
+        verificationStatus: e.sponsorReferencesVerificationStatus ?? '',
+      });
+    }
+
     return Asset.reconstruct({
       id: AssetId.create(e.id),
       tenantId: TenantId.create(e.tenantId),
       name: e.name,
       assetClass: e.assetClass as AssetClass,
+      assetSubClass: (e.assetSubClass ?? 'residential') as AssetSubClass,
       sponsorId: e.sponsorId,
       status: e.status as AssetOriginationStatus,
       jurisdictions: e.jurisdictions,
+      country: e.country ?? '',
       purchasePrice:
         e.purchasePriceAmount !== null && e.purchasePriceCurrency
           ? Money.of(BigInt(e.purchasePriceAmount), e.purchasePriceCurrency)
@@ -72,18 +100,23 @@ export class AssetMapper {
       approvedBy: e.approvedBy,
       rejectionReason: e.rejectionReason,
       version: e.version,
-      sponsorReference: e.sponsorReferences
+      externalReference: e.externalReference ?? null,
+      internalReference: e.internalReference ?? null,
+      legalName: e.legalName ?? e.name,
+      source: source
         ? {
-            id: e.sponsorReferences.id,
-            entityId: e.sponsorReferences.entityId,
-            tenantId: e.sponsorReferences.tenantId,
-            name: e.sponsorReferences.name,
-            jurisdiction: e.sponsorReferences.jurisdiction,
-            relationshipStatus: e.sponsorReferences.relationshipStatus,
-            riskRating: e.sponsorReferences.riskRating,
-            verificationStatus: e.sponsorReferences.verificationStatus,
+            sourceId: source.sourceId,
+            sourceType: source.sourceType as OriginationSource['sourceType'],
+            sourceEntityId: source.sourceEntityId,
+            sourceReference: source.sourceReference,
+            originatedAt: UtcInstant.fromIso(source.originatedAt),
+            submittedBy: source.submittedBy,
+            relationshipManager: source.relationshipManager,
           }
         : null,
+      screening: null,
+      qualification: null,
+      sponsorReference,
     });
   }
 
@@ -93,6 +126,11 @@ export class AssetMapper {
     e.tenantId = domain.tenantId.value;
     e.name = domain.name;
     e.assetClass = domain.assetClass;
+    e.assetSubClass = domain.assetSubClass;
+    e.legalName = domain.legalName;
+    e.country = domain.country;
+    e.externalReference = domain.externalReference;
+    e.internalReference = domain.internalReference;
     e.sponsorId = domain.sponsorId;
     e.status = domain.status;
     e.jurisdictions = domain.jurisdictions;
@@ -113,6 +151,17 @@ export class AssetMapper {
       documentedAt: p.documentedAt.toIso(),
       priorOwners: p.priorOwners,
     }));
+    e.source = domain.source
+      ? {
+          sourceId: domain.source.sourceId,
+          sourceType: domain.source.sourceType,
+          sourceEntityId: domain.source.sourceEntityId,
+          sourceReference: domain.source.sourceReference,
+          originatedAt: domain.source.originatedAt.toIso(),
+          submittedBy: domain.source.submittedBy,
+          relationshipManager: domain.source.relationshipManager,
+        }
+      : null;
     e.valuationFairValue = domain.valuation?.fairValueMinorUnits ?? null;
     e.valuationCurrency = domain.valuation?.currency ?? null;
     e.valuationMethodology = domain.valuation?.methodology ?? null;
@@ -121,18 +170,14 @@ export class AssetMapper {
     e.approvedBy = domain.approvedBy;
     e.rejectionReason = domain.rejectionReason;
     e.version = domain.version;
-    // Map sponsor reference if present
     if (domain.sponsorReference) {
-      const refOrm = new SponsorReferenceOrmEntity();
-      refOrm.id = domain.sponsorReference.id;
-      refOrm.entityId = domain.id.value;
-      refOrm.tenantId = domain.tenantId.value;
-      refOrm.name = domain.sponsorReference.name;
-      refOrm.jurisdiction = domain.sponsorReference.jurisdiction;
-      refOrm.relationshipStatus = domain.sponsorReference.relationshipStatus;
-      refOrm.riskRating = domain.sponsorReference.riskRating;
-      refOrm.verificationStatus = domain.sponsorReference.verificationStatus;
-      e.sponsorReferences = refOrm;
+      e.sponsorReferencesId = domain.sponsorReference.id;
+      e.sponsorReferencesEntityId = domain.sponsorReference.entityId;
+      e.sponsorReferencesName = domain.sponsorReference.name;
+      e.sponsorReferencesJurisdiction = domain.sponsorReference.jurisdiction;
+      e.sponsorReferencesRelationshipStatus = domain.sponsorReference.relationshipStatus;
+      e.sponsorReferencesRiskRating = domain.sponsorReference.riskRating;
+      e.sponsorReferencesVerificationStatus = domain.sponsorReference.verificationStatus;
     }
     return e;
   }

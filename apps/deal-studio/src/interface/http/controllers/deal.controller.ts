@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Logger } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CorrelationId } from '@daos/shared-kernel';
+import { CorrelationId, TenantContextHolder } from '@daos/shared-kernel';
 
 import { ApproveDealCommand } from '../../../application/commands/approve-deal.command';
 import { CancelDealCommand } from '../../../application/commands/cancel-deal.command';
@@ -27,8 +27,9 @@ import {
   FinalizeTermSheetDto,
   MeetClosingConditionDto,
   UpdateCapitalStackDto,
-  UpdateDealDto,
 } from '../../../application/dto/deal-action.dto';
+import { CloseConditionsSubmitDto, CloseConditionsVerifyDto, CloseConditionsWaiveDto, PutOnHoldDto } from '../../../application/dto/close-conditions.dto';
+import { UpdateDealDto } from '../../../application/dto/update-deal.dto';
 import { StructureDealDto } from '../../../application/dto/structure-deal.dto';
 import { GetDealQuery } from '../../../application/queries/get-deal.query';
 import { GetTermSheetQuery } from '../../../application/queries/get-term-sheet.query';
@@ -48,9 +49,9 @@ import { PipelineDealsQuery } from '../../../application/queries/pipeline-deals.
 
 @ApiTags('deals')
 @Controller('deals')
-private readonly logger = new Logger(DealController.name);
-
 export class DealController {
+  private readonly logger = new Logger(DealController.name);
+
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -74,7 +75,7 @@ export class DealController {
 
   @Post(':id/structuring/start')
   @ApiOperation({ summary: 'Start structuring a deal' })
-  startStructuring(@Param('id') id: string, @Body() /* no body needed */) {
+  startStructuring(@Param('id') id: string) {
     return this.commandBus.execute(new StartStructuringCommand(id, 'actor-uuid'));
   }
 
@@ -88,25 +89,25 @@ export class DealController {
 
   @Post(':id/term-sheet')
   @ApiOperation({ summary: 'Submit term sheet for a deal' })
-  submitTermSheet(@Param('id') id: string, @Body() /* no body needed */) {
+  submitTermSheet(@Param('id') id: string) {
     return this.commandBus.execute(new FinalizeTermSheetCommand(id, 'actor-uuid'));
   }
 
   @Post(':id/term-sheet/finalize')
   @ApiOperation({ summary: 'Finalize the term sheet of a deal' })
-  finalizeTermSheet(@Param('id') id: string, @Body() /* no body needed */) {
+  finalizeTermSheet(@Param('id') id: string) {
     return this.commandBus.execute(new FinalizeTermSheetCommand(id, 'actor-uuid'));
   }
 
   @Post(':id/legal-review/submit')
   @ApiOperation({ summary: 'Submit deal for legal review' })
-  submitForLegalReview(@Param('id') id: string, @Body() /* no body needed */) {
+  submitForLegalReview(@Param('id') id: string) {
     return this.commandBus.execute(new SubmitForLegalReviewCommand(id, 'actor-uuid'));
   }
 
   @Post(':id/approval/submit')
   @ApiOperation({ summary: 'Submit deal for approval' })
-  submitForApproval(@Param('id') id: string, @Body() /* no body needed */) {
+  submitForApproval(@Param('id') id: string) {
     return this.commandBus.execute(new SubmitForApprovalCommand(id, 'actor-uuid', 'workflow-uuid'));
   }
 
@@ -136,7 +137,7 @@ export class DealController {
 
   @Post(':id/closing/start')
   @ApiOperation({ summary: 'Start the closing process' })
-  closeStart(@Param('id') id: string, @Body() /* no body needed */) {
+  closeStart(@Param('id') id: string) {
     const correlationId = CorrelationId.create();
     this.logger.log(`Deal close start | correlationId=${correlationId.value} | dealId=${id} | actor=${TenantContextHolder.get().userId}`);
     return this.commandBus.execute(new CloseStartCommand(id, 'actor-uuid'));
@@ -160,7 +161,7 @@ export class DealController {
 
   @Post(':id/resume')
   @ApiOperation({ summary: 'Resume a deal from hold' })
-  resume(@Param('id') id: string, @Body() /* no body needed */) {
+  resume(@Param('id') id: string) {
     const correlationId = CorrelationId.create();
     this.logger.log(`Deal resume | correlationId=${correlationId.value} | dealId=${id} | actor=${TenantContextHolder.get().userId}`);
     return this.commandBus.execute(new ResumeCommand(id, 'actor-uuid'));
@@ -170,7 +171,7 @@ export class DealController {
   @ApiOperation({ summary: 'Cancel a deal' })
   cancel(@Param('id') id: string, @Body() dto: CancelDealDto) {
     const correlationId = CorrelationId.create();
-    this.logger.log(`Deal cancel | correlationId=${correlationId.value} | dealId=${id} | actor=${dto.actorId}`);
+    this.logger.log(`Deal cancel | correlationId=${correlationId.value} | dealId=${id} | actor=${TenantContextHolder.get().userId}`);
     return this.commandBus.execute(new CancelDealCommand(id, dto));
   }
 

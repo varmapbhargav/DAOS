@@ -1,5 +1,8 @@
 import { DomainEvent } from './domain-event';
 
+/** Generic free-form metadata attached to domain aggregates/commands. */
+export type DomainMetadata = Record<string, unknown>;
+
 export abstract class AggregateRoot {
   protected _version = 0;
   private _events: DomainEvent[] = [];

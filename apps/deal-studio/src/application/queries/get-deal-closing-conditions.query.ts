@@ -24,7 +24,7 @@ export class GetDealClosingConditionsHandler implements IQueryHandler<GetDealClo
     return {
       dealId: deal.id.value,
       closingConditions: deal.closingConditions.map((c) => ({
-        conditionId: c.conditionId,
+        conditionId: c.conditionType,
         description: c.description,
         category: c.category,
         responsibleParty: c.responsibleParty,

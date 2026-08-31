@@ -1,5 +1,8 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
+
 export class CloseConditionsSubmitDto {
-  @ApiProperty({ example 'condition-uuid' })
+  @ApiProperty({ example: 'condition-uuid' })
   @IsString()
   conditionId!: string;
 

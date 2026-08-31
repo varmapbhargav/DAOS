@@ -1,0 +1,11 @@
+type: Dataplane
+mesh: default
+name: legal-entity-studio
+networking:
+  address: 0.0.0.0
+  inbound:
+    - port: 9000
+      servicePort: 3006
+      tags:
+        kuma.io/service: legal-entity-studio
+        kuma.io/protocol: http
