@@ -242,25 +242,22 @@ services:
       - mesh
     restart: 'no'
 
-  # ─── Flyway (database migrations) ─────────────────────────────────────────
+  # ─── Liquibase (database migrations) ─────────────────────────────────────
 
-  flyway:
-    image: flyway/flyway:10-alpine
-    container_name: daos-flyway
+  liquibase:
+    image: liquibase/liquibase:4-alpine
+    container_name: daos-liquibase
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - ./db/migrations:/flyway/sql:ro
+      - ./db:/liquibase:ro
     environment:
-      FLYWAY_URL: jdbc:postgresql://postgres:5432/daos
-      FLYWAY_USER: daos
-      FLYWAY_PASSWORD: daos_dev_password
-      FLYWAY_SCHEMAS: tenant_identity,investor_management,asset_origination,opportunity_engineering,deal_studio,legal_entity_studio,product_design_studio,issuance_studio,document_management,cap_table,distribution,marketplace,settlement,waterfall_engine,pricing_valuation
-      FLYWAY_LOCATIONS: filesystem:/flyway/sql/tenant_identity,filesystem:/flyway/sql/investor_management,filesystem:/flyway/sql/asset_origination,filesystem:/flyway/sql/opportunity_engineering,filesystem:/flyway/sql/deal_studio,filesystem:/flyway/sql/legal_entity_studio,filesystem:/flyway/sql/product_design_studio,filesystem:/flyway/sql/issuance_studio,filesystem:/flyway/sql/document_management,filesystem:/flyway/sql/cap_table,filesystem:/flyway/sql/distribution,filesystem:/flyway/sql/marketplace,filesystem:/flyway/sql/settlement,filesystem:/flyway/sql/waterfall_engine,filesystem:/flyway/sql/pricing_valuation
-      FLYWAY_BASELINE_ON_MIGRATE: 'true'
-      FLYWAY_MIXED: 'true'
-    command: migrate
+      LIQUIBASE_URL: jdbc:postgresql://postgres:5432/daos
+      LIQUIBASE_USERNAME: daos
+      LIQUIBASE_PASSWORD: daos_dev_password
+      LIQUIBASE_CHANGELOG_FILE: /liquibase/changelog/master.xml
+    command: update
     profiles:
       - migrate
 

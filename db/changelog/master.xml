@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <include file="changelog/000_init.xml"/>
+
+  <include file="changelog/tenant_identity/changelog.xml"/>
+  <include file="changelog/investor_management/changelog.xml"/>
+  <include file="changelog/asset_origination/changelog.xml"/>
+  <include file="changelog/opportunity_engineering/changelog.xml"/>
+  <include file="changelog/deal_studio/changelog.xml"/>
+  <include file="changelog/legal_entity_studio/changelog.xml"/>
+  <include file="changelog/product_design_studio/changelog.xml"/>
+  <include file="changelog/issuance_studio/changelog.xml"/>
+  <include file="changelog/distribution/changelog.xml"/>
+  <include file="changelog/marketplace/changelog.xml"/>
+  <include file="changelog/waterfall_engine/changelog.xml"/>
+  <include file="changelog/settlement/changelog.xml"/>
+  <include file="changelog/compliance/changelog.xml"/>
+  <include file="changelog/governance/changelog.xml"/>
+  <include file="changelog/document_management/changelog.xml"/>
+  <include file="changelog/pricing_valuation/changelog.xml"/>
+  <include file="changelog/cap_table/changelog.xml"/>
+  <include file="changelog/tenant_organization/changelog.xml"/>
+  <include file="changelog/notification/changelog.xml"/>
+  <include file="changelog/wallet_custody/changelog.xml"/>
+  <include file="changelog/risk_management/changelog.xml"/>
+  <include file="changelog/reporting/changelog.xml"/>
+
+</databaseChangeLog>
