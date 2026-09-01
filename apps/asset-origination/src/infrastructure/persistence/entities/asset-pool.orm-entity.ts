@@ -22,7 +22,7 @@ export class AssetPoolOrmEntity {
   @Column({ name: 'strategy', type: 'text' })
   strategy!: string;
 
-  @Column({ name: 'currency', type: 'char(3)' })
+  @Column({ name: 'currency', type: 'char', length: 3 })
   currency!: string;
 
   @Column({ name: 'status', type: 'text', default: 'DRAFT' })

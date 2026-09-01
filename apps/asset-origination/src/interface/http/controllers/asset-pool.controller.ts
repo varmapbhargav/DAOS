@@ -16,7 +16,7 @@ import {
   UpdateAssetPoolCommand,
   UpdateConcentrationRulesCommand,
   UpdateEligibilityPolicyCommand,
-} from '../../application/commands/asset-pool.commands';
+} from '../../../application/commands/asset-pool.commands';
 import {
   AddAssetToPoolDto,
   ChangePoolStatusDto,
@@ -31,14 +31,14 @@ import {
   UpdateAssetPoolDto,
   UpdateConcentrationRulesDto,
   UpdateEligibilityPolicyDto,
-} from '../../application/dto/asset-pool.dto';
+} from '../../../application/dto/asset-pool.dto';
 import {
   GetAssetPoolByNameQuery,
   GetAssetPoolQuery,
   GetPoolAssetByAssetQuery,
   ListAssetPoolsQuery,
   ListPoolAssetsQuery,
-} from '../../application/queries/asset-pool.query';
+} from '../../../application/queries/asset-pool.query';
 
 @ApiTags('asset-pools')
 @Controller('asset-pools')

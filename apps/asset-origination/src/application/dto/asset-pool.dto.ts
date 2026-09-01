@@ -31,7 +31,7 @@ export class CreateAssetPoolDto {
   @IsOptional()
   eligibilityPolicy?: Record<string, unknown>;
 
-  @ApiPropertyOptional({ type: [Object] })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsArray()
   concentrationRules?: Array<{
@@ -77,7 +77,7 @@ export class RemoveAssetFromPoolDto {
 }
 
 export class RebalancePoolDto {
-  @ApiProperty({ type: 'object' })
+  @ApiProperty()
   targetAllocations!: Record<string, number>;
 }
 

@@ -1,4 +1,5 @@
-import { AssetPoolId, ConcentrationRule, EligibilityPolicy, PoolAsset, PoolAssetId, PoolStatus, PoolStrategy, PoolType, TenantId } from '@daos/shared-kernel';
+import { AssetPoolId, ConcentrationRule, EligibilityPolicy, PoolAssetId, PoolStatus, PoolStrategy, PoolType, TenantId } from '@daos/shared-kernel';
+import { PoolAsset } from './pool-asset.entity';
 
 export class AssetPool {
   private constructor(

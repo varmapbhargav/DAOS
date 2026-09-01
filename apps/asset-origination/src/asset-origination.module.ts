@@ -219,6 +219,7 @@ import { EvidenceOrmEntity } from './infrastructure/persistence/entities/evidenc
 import { OriginationCaseOrmEntity } from './infrastructure/persistence/entities/origination-case.orm-entity';
 import { OwnershipOrmEntity } from './infrastructure/persistence/entities/ownership.orm-entity';
 import { QualificationResultOrmEntity } from './infrastructure/persistence/entities/qualification-result.orm-entity';
+import { PoolAssetOrmEntity } from './infrastructure/persistence/entities/pool-asset.orm-entity';
 import { RiskItemOrmEntity } from './infrastructure/persistence/entities/risk-item.orm-entity';
 import { ScreeningResultOrmEntity } from './infrastructure/persistence/entities/screening-result.orm-entity';
 import { SponsorReferenceOrmEntity } from './infrastructure/persistence/entities/sponsor-reference.orm-entity';
@@ -236,6 +237,8 @@ import { PostgresAssetRightsRepository } from './infrastructure/persistence/post
 import { PostgresAssetRiskAssessmentRepository } from './infrastructure/persistence/postgres-asset-risk-assessment.repository';
 import { PostgresAssetTransferabilityRepository } from './infrastructure/persistence/postgres-asset-transferability.repository';
 import { PostgresBlockerRepository } from './infrastructure/persistence/postgres-blocker.repository';
+import { PostgresAssetPoolRepository } from './infrastructure/persistence/postgres-asset-pool.repository';
+import { PostgresPoolAssetRepository } from './infrastructure/persistence/postgres-pool-asset.repository';
 import { PostgresCashFlowModelRepository } from './infrastructure/persistence/postgres-cash-flow-model.repository';
 import { PostgresCompletenessResultRepository } from './infrastructure/persistence/postgres-completeness-result.repository';
 import { PostgresDataRequestRepository } from './infrastructure/persistence/postgres-data-request.repository';
@@ -259,6 +262,7 @@ import {
   CaseDataRequestController,
 } from './interface/http/controllers/asset-profile.controller';
 import { DueDiligenceController } from './interface/http/controllers/due-diligence.controller';
+import { AssetPoolController } from './interface/http/controllers/asset-pool.controller';
 import { OriginationCaseController } from './interface/http/controllers/origination-case.controller';
 import { DomainExceptionFilter } from './interface/http/filters/domain-exception.filter';
 import { TenantContextInterceptor } from './interface/http/interceptors/tenant-context.interceptor';
@@ -339,6 +343,19 @@ const commandHandlers = [
   AssessEngineeringReadinessHandler,
   RecordEngineeringCheckHandler,
   CompleteEngineeringReadinessHandler,
+  CreateAssetPoolHandler,
+  UpdateAssetPoolHandler,
+  ChangePoolStatusHandler,
+  AddAssetToPoolHandler,
+  UpdateAssetAllocationHandler,
+  RemoveAssetFromPoolHandler,
+  RebalancePoolHandler,
+  SplitPoolHandler,
+  MergePoolsHandler,
+  UpdateConcentrationRulesHandler,
+  UpdateEligibilityPolicyHandler,
+  CheckEligibilityHandler,
+  SetParentPoolHandler,
 ];
 
 const queryHandlers = [
@@ -372,6 +389,11 @@ const queryHandlers = [
   GetApprovalByCaseHandler,
   ListApprovalDecisionsByCaseHandler,
   GetEngineeringReadinessByCaseHandler,
+  GetAssetPoolHandler,
+  GetAssetPoolByNameHandler,
+  ListAssetPoolsHandler,
+  ListPoolAssetsHandler,
+  GetPoolAssetByAssetHandler,
 ];
 
 @Module({
@@ -418,6 +440,8 @@ const queryHandlers = [
           ApprovalCaseOrmEntity,
           ApprovalDecisionOrmEntity,
           EngineeringReadinessOrmEntity,
+          AssetPoolOrmEntity,
+          PoolAssetOrmEntity,
         ],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,
@@ -427,6 +451,7 @@ const queryHandlers = [
   ],
   controllers: [
     AssetController,
+    AssetPoolController,
     DueDiligenceController,
     OriginationCaseController,
     AssetProfileController,
@@ -458,6 +483,8 @@ const queryHandlers = [
     { provide: ASSET_RISK_ASSESSMENT_REPOSITORY, useClass: PostgresAssetRiskAssessmentRepository },
     { provide: RISK_ITEM_REPOSITORY, useClass: PostgresRiskItemRepository },
     { provide: VALUATION_REPOSITORY, useClass: PostgresValuationRepository },
+    { provide: ASSET_POOL_REPOSITORY, useClass: PostgresAssetPoolRepository },
+    { provide: POOL_ASSET_REPOSITORY, useClass: PostgresPoolAssetRepository },
     { provide: APPROVAL_CASE_REPOSITORY, useClass: PostgresApprovalCaseRepository },
     { provide: APPROVAL_DECISION_REPOSITORY, useClass: PostgresApprovalDecisionRepository },
     { provide: ENGINEERING_READINESS_REPOSITORY, useClass: PostgresEngineeringReadinessRepository },

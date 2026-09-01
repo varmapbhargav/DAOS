@@ -1,4 +1,4 @@
-import { TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { AssetPoolId,TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
@@ -40,7 +40,7 @@ export class GetAssetPoolHandler implements IQueryHandler<GetAssetPoolQuery> {
     return this.toDto(pool);
   }
 
-  private toDto(pool: any) {
+  public toDto(pool: any) {
     return {
       id: pool.id.value,
       name: pool.name,
