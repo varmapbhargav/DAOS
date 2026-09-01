@@ -79,8 +79,8 @@ const queryHandlers = [GetTenantHandler, ListUsersHandler, GetUserHandler, ListR
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'tenant_identity',
+        database: config.get('DB_NAME', 'daos_tenant_identity'),
+
         entities: [TenantOrmEntity, RoleOrmEntity, UserOrmEntity],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,

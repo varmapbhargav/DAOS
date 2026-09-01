@@ -3,8 +3,8 @@ import { NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kerne
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { DUE_DILIGENCE_REPORT_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { DueDiligenceReportRepository } from '../../domain/repositories/due-diligence-report.repository';
+import { DUE_DILIGENCE_REPORT_REPOSITORY } from '../../domain/repositories/repository.tokens';
 
 export class GetDueDiligenceReportQuery {
   constructor(public readonly assetId: string) {}

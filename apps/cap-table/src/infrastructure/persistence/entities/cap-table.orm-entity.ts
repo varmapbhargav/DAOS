@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'cap_tables', schema: 'cap_table' })
+@Entity({ name: 'cap_tables' })
 export class CapTableOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

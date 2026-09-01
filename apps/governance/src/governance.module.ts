@@ -35,8 +35,8 @@ import { PostgresMeetingRepository } from './infrastructure/persistence/postgres
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'governance',
+        database: config.get('DB_NAME', 'daos_governance'),
+
         autoLoadEntities: true,
       }),
       inject: [ConfigModule],

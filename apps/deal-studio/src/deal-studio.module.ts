@@ -3,6 +3,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  PostgresEventStore,
+  PostgresSnapshotStore,
+  EventStoreEntity,
+  SnapshotEntity,
+} from '@daos/shared-kernel';
 
 import { ApproveDealHandler } from './application/commands/approve-deal.command';
 import { CancelDealHandler } from './application/commands/cancel-deal.command';
@@ -45,8 +51,10 @@ import {
   DEAL_REPOSITORY,
   DEAL_STATUS_HISTORY_REPOSITORY,
   DISTRIBUTION_WATERFALL_REPOSITORY,
+  EVENT_STORE,
   IDEMPOTENCY_STORE,
   OUTBOX_PUBLISHER,
+  SNAPSHOT_STORE,
   SCENARIO_REPOSITORY,
   TERM_SHEET_REPOSITORY,
 } from './domain/repositories/repository.tokens';
@@ -63,6 +71,7 @@ import { DealEconomicsOrmEntity } from './infrastructure/persistence/entities/de
 import { DealParticipantOrmEntity } from './infrastructure/persistence/entities/deal-participant.orm-entity';
 import { DealStatusHistoryOrmEntity } from './infrastructure/persistence/entities/deal-status-history.orm-entity';
 import { DealOrmEntity } from './infrastructure/persistence/entities/deal.orm-entity';
+import { DealSummaryReadModel } from './infrastructure/persistence/entities/deal-summary-read-model.entity';
 import { DistributionWaterfallOrmEntity } from './infrastructure/persistence/entities/distribution-waterfall.orm-entity';
 import { IdempotencyRecordOrmEntity } from './infrastructure/persistence/entities/idempotency-record.orm-entity';
 import { OutboxEventOrmEntity } from './infrastructure/persistence/entities/outbox-event.orm-entity';
@@ -74,6 +83,9 @@ import { PostgresDealRepository } from './infrastructure/persistence/postgres-de
 import { PostgresDistributionWaterfallRepository } from './infrastructure/persistence/postgres-distribution-waterfall.repository';
 import { PostgresScenarioRepository } from './infrastructure/persistence/postgres-scenario.repository';
 import { PostgresTermSheetRepository } from './infrastructure/persistence/postgres-term-sheet.repository';
+import { EventSourcedDealRepository } from './infrastructure/persistence/event-sourced-deal.repository';
+import { ProjectionOutboxBridge } from './infrastructure/projections/projection-outbox-bridge';
+import { DealSummaryProjection } from './infrastructure/projections/deal-summary.projection';
 
 const commandHandlers = [
   ApproveDealHandler,
@@ -124,12 +136,16 @@ const ormEntities = [
   IdempotencyRecordOrmEntity,
   OutboxEventOrmEntity,
   ScenarioOrmEntity,
+  EventStoreEntity,
+  SnapshotEntity,
+  DealSummaryReadModel,
 ];
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     CqrsModule,
+    TypeOrmModule.forFeature([DealSummaryReadModel]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -139,8 +155,7 @@ const ormEntities = [
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'deal_studio',
+        database: config.get('DB_NAME', 'daos_deal_studio'),
         entities: ormEntities,
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,
@@ -150,7 +165,34 @@ const ormEntities = [
   ],
   controllers: [DealController, TermSheetController],
   providers: [
-    { provide: DEAL_REPOSITORY, useClass: PostgresDealRepository },
+    PostgresEventStore,
+    PostgresSnapshotStore,
+    PostgresOutboxPublisher,
+    {
+      provide: EVENT_STORE,
+      useExisting: PostgresEventStore,
+    },
+    {
+      provide: SNAPSHOT_STORE,
+      useExisting: PostgresSnapshotStore,
+    },
+    {
+      provide: DEAL_REPOSITORY,
+      useClass: EventSourcedDealRepository,
+    },
+    DealSummaryProjection,
+    {
+      provide: OUTBOX_PUBLISHER,
+      useFactory: (
+        publisher: PostgresOutboxPublisher,
+        projection: DealSummaryProjection,
+      ) => {
+        const bridge = new ProjectionOutboxBridge(publisher);
+        bridge.addHandler(projection);
+        return bridge;
+      },
+      inject: [PostgresOutboxPublisher, DealSummaryProjection],
+    },
     { provide: TERM_SHEET_REPOSITORY, useClass: PostgresTermSheetRepository },
     { provide: CLOSING_CONDITION_REPOSITORY, useClass: PostgresClosingConditionRepository },
     { provide: DEAL_STATUS_HISTORY_REPOSITORY, useClass: PostgresDealStatusHistoryRepository },
@@ -159,7 +201,6 @@ const ormEntities = [
     { provide: IDEMPOTENCY_STORE, useClass: PostgresIdempotencyStore },
     { provide: CAPITAL_STACK_VALIDATOR, useClass: CapitalStackValidator },
     { provide: CLOSING_CONDITION_CHECKER, useClass: ClosingConditionChecker },
-    { provide: OUTBOX_PUBLISHER, useClass: PostgresOutboxPublisher },
     { provide: APP_INTERCEPTOR, useClass: TenantContextInterceptor },
     { provide: APP_FILTER, useClass: DomainExceptionFilter },
     ...commandHandlers,

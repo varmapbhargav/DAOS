@@ -42,9 +42,10 @@ export class AddScenarioHandler implements ICommandHandler<AddScenarioCommand, {
     const model = ScenarioModel.create({
       tenantId,
       opportunityId: opportunity.id.value,
+      strategyId: null,
       name: command.dto.name,
       scenarioType: command.dto.scenarioType as ScenarioType,
-      keyAssumptions: command.dto.keyAssumptions,
+      holdPeriodMonths: command.dto.holdPeriodMonths ?? 60,
     });
 
     opportunity.addScenario(model.id.value);

@@ -72,8 +72,7 @@ const queryHandlers = [
         port: Number(process.env.DB_PORT ?? 5432),
         username: process.env.DB_USER ?? 'daos',
         password: process.env.DB_PASSWORD ?? 'daos_dev_password',
-        database: process.env.DB_NAME ?? 'daos',
-        schema: 'tenant_organization',
+        database: process.env.DB_NAME ?? 'daos_tenant_organization',
         entities: [
           TenantProfileOrmEntity,
           ServiceEntitlementOrmEntity,

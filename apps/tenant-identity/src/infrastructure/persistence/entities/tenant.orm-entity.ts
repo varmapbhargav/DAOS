@@ -1,7 +1,7 @@
 import { TenantScopedEntity } from '@daos/shared-kernel/infrastructure';
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'tenants', schema: 'tenant_identity' })
+@Entity({ name: 'tenants' })
 export class TenantOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

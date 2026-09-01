@@ -4,8 +4,8 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { AssetLifecycleHistory } from '../../domain/entities/asset-lifecycle-history.entity';
-import { AssetLifecycleHistoryOrmEntity } from './entities/asset-lifecycle-history.orm-entity';
 import { AssetLifecycleHistoryRepository } from '../../domain/repositories/asset-lifecycle-history.repository';
+import { AssetLifecycleHistoryOrmEntity } from './entities/asset-lifecycle-history.orm-entity';
 
 @Injectable()
 export class PostgresAssetLifecycleHistoryRepository implements AssetLifecycleHistoryRepository {

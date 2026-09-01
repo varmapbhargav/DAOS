@@ -41,8 +41,8 @@ const queryHandlers = [
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'document_management',
+        database: config.get('DB_NAME', 'daos_document_management'),
+
         entities: [DocumentOrmEntity],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,

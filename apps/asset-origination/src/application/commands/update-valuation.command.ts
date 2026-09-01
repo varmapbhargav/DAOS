@@ -1,11 +1,10 @@
 import { NotFoundError, OutboxPublisher, TenantContextHolder, TenantId, ValuationMethodology } from '@daos/shared-kernel';
+import { AssetId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { AssetId } from '@daos/shared-kernel';
-
-import { ASSET_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
 import { UpdateValuationDto } from '../dto/asset-action.dto';
 
 export class UpdateValuationCommand {

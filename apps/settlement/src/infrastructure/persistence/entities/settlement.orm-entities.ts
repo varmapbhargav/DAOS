@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'settlement_instructions', schema: 'settlement' })
+@Entity({ name: 'settlement_instructions' })
 export class SettlementInstructionOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -51,7 +51,7 @@ export class SettlementInstructionOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'custody_accounts', schema: 'settlement' })
+@Entity({ name: 'custody_accounts' })
 export class CustodyAccountOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

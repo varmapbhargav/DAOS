@@ -14,6 +14,7 @@ import {
   GovernanceTerms,
   OpportunityReference,
   ParticipantRole,
+  StoredEvent,
   TenantId,
 } from '@daos/shared-kernel';
 
@@ -563,5 +564,103 @@ export class Deal extends AggregateRoot {
   /** @deprecated Use markApproved() */
   approve(actorId: string, checker: ClosingConditionChecker): void {
     this.markApproved(actorId);
+  }
+
+  // ─── Event Sourcing: apply events to reconstruct state ──────────────────
+
+  protected when(event: StoredEvent): void {
+    const p = event.payload as Record<string, unknown>;
+    switch (event.eventType) {
+      case 'deal.created.v1':
+        this._status = 'DRAFT';
+        this._name = (p['name'] as string) ?? this._name;
+        this._assetId = (p['assetId'] as string) ?? this._assetId;
+        this._sponsorId = (p['sponsorId'] as string) ?? this._sponsorId;
+        break;
+
+      case 'deal.structuring.started.v1':
+        this._status = 'STRUCTURING';
+        break;
+
+      case 'deal.terms.changed.v1':
+        this._status = (p['newStatus'] as DealStatus) ?? this._status;
+        break;
+
+      case 'deal.submitted-for-legal-review.v1':
+        this._status = 'LEGAL_REVIEW';
+        break;
+
+      case 'deal.legal-review.completed.v1':
+        this._status = 'READY_FOR_APPROVAL';
+        break;
+
+      case 'deal.submitted-for-approval.v1':
+        this._status = 'READY_FOR_APPROVAL';
+        break;
+
+      case 'deal.approved.v1':
+        this._status = 'APPROVED';
+        this._approvedBy = (p['actorId'] as string) ?? null;
+        this._approvedAt = event.occurredAt;
+        break;
+
+      case 'deal.rejected.v1':
+        this._status = 'REJECTED';
+        this._rejectedBy = (p['actorId'] as string) ?? null;
+        this._rejectedAt = event.occurredAt;
+        this._rejectionReason = (p['reason'] as string) ?? null;
+        break;
+
+      case 'deal.ready-for-closing.v1':
+        this._status = 'READY_TO_CLOSE';
+        break;
+
+      case 'deal.closing.started.v1':
+        this._status = 'CLOSING';
+        break;
+
+      case 'deal.closed.v1':
+        this._status = 'CLOSED';
+        this._closedAt = event.occurredAt;
+        break;
+
+      case 'deal.on-hold.v1':
+        this._previousStatusBeforeHold = this._status;
+        this._holdReason = (p['reason'] as string) ?? null;
+        this._status = 'ON_HOLD';
+        break;
+
+      case 'deal.resumed.v1':
+        this._holdReason = null;
+        this._status = this._previousStatusBeforeHold ?? 'STRUCTURING';
+        this._previousStatusBeforeHold = null;
+        break;
+
+      case 'deal.cancelled.v1':
+        this._status = 'CANCELLED';
+        break;
+
+      case 'deal.expired.v1':
+        this._status = 'EXPIRED';
+        break;
+
+      case 'deal.capital-stack.updated.v1':
+        break;
+
+      case 'deal.participant.changed.v1':
+        break;
+
+      case 'deal.closing-condition.changed.v1':
+        break;
+
+      case 'deal.approval.changed.v1':
+        break;
+
+      case 'deal.scenario.calculated.v1':
+        break;
+
+      default:
+        break;
+    }
   }
 }

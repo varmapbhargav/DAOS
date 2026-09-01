@@ -20,9 +20,6 @@ import { StartScreeningCommand } from '../../../application/commands/start-scree
 import { StartValuationCommand } from '../../../application/commands/start-valuation.command';
 import { SubmitForApprovalCommand } from '../../../application/commands/submit-for-approval.command';
 import { WithdrawAssetCommand } from '../../../application/commands/withdraw-asset.command';
-import { GetAssetQuery } from '../../../application/queries/get-asset.query';
-import { ListAssetsQuery } from '../../../application/queries/list-assets.query';
-import { OriginateAssetDto } from '../../../application/dto/originate-asset.dto';
 import {
   ApproveAssetDto,
   CompleteDueDiligenceDto,
@@ -40,6 +37,9 @@ import {
   SubmitForApprovalDto,
   WithdrawAssetDto,
 } from '../../../application/dto/asset-action.dto';
+import { OriginateAssetDto } from '../../../application/dto/originate-asset.dto';
+import { GetAssetQuery } from '../../../application/queries/get-asset.query';
+import { ListAssetsQuery } from '../../../application/queries/list-assets.query';
 
 @ApiTags('assets')
 @Controller('assets')

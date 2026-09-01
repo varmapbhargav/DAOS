@@ -14,8 +14,9 @@ export class PostgresScenarioModelRepository implements ScenarioModelRepository 
 
   async save(model: ScenarioModel): Promise<void> {
     const orm = ScenarioModelMapper.toOrm(model);
+    const expectedVersion = model.version - 1;
     await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${model.tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [model.tenantId.value]);
       await manager
         .getRepository(ScenarioModelOrmEntity)
         .createQueryBuilder()
@@ -37,12 +38,25 @@ export class PostgresScenarioModelRepository implements ScenarioModelRepository 
           ['id'],
         )
         .execute();
+
+      if (expectedVersion > 0) {
+        const updated = await manager
+          .createQueryBuilder()
+          .update(ScenarioModelOrmEntity)
+          .set({ version: orm.version, updatedAt: new Date() })
+          .where('id = :id AND version = :expectedVersion', { id: orm.id, expectedVersion })
+          .execute();
+
+        if (updated.affected === 0) {
+          throw new Error('Optimistic lock failed: scenario model was modified by another process');
+        }
+      }
     });
   }
 
   async findById(tenantId: TenantId, id: ScenarioModelId): Promise<ScenarioModel | null> {
     const e = await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [tenantId.value]);
       return manager
         .getRepository(ScenarioModelOrmEntity)
         .findOne({ where: { tenantId: tenantId.value, id: id.value } });
@@ -52,7 +66,7 @@ export class PostgresScenarioModelRepository implements ScenarioModelRepository 
 
   async findByOpportunityId(tenantId: TenantId, opportunityId: string): Promise<ScenarioModel[]> {
     const entities = await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [tenantId.value]);
       return manager
         .getRepository(ScenarioModelOrmEntity)
         .find({ where: { tenantId: tenantId.value, opportunityId } });

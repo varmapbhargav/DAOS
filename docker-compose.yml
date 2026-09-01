@@ -277,7 +277,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       IDENTITY_PORT: '3001'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_tenant_identity
+      DB_NAME: daos_tenant_identity
+      DB_HOST: postgres
       JWT_SECRET: ${JWT_SECRET:-dev-secret-change-me}
     networks:
       - mesh
@@ -319,7 +321,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       INVESTOR_PORT: '3002'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_investor_management
+      DB_NAME: daos_investor_management
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -360,7 +364,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       ASSET_PORT: '3003'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_asset_origination
+      DB_NAME: daos_asset_origination
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -401,7 +407,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       OPPORTUNITY_PORT: '3004'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_opportunity_engineering
+      DB_NAME: daos_opportunity_engineering
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -442,7 +450,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       DEAL_PORT: '3005'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_deal_studio
+      DB_NAME: daos_deal_studio
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -483,7 +493,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       ENTITY_PORT: '3006'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_legal_entity_studio
+      DB_NAME: daos_legal_entity_studio
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -524,7 +536,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       PRODUCT_PORT: '3007'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_product_design_studio
+      DB_NAME: daos_product_design_studio
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -565,7 +579,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       ISSUANCE_PORT: '3008'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_issuance_studio
+      DB_NAME: daos_issuance_studio
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -606,7 +622,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       DISTRIBUTION_PORT: '3009'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_distribution
+      DB_NAME: daos_distribution
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -647,7 +665,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       MARKETPLACE_PORT: '3010'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_marketplace
+      DB_NAME: daos_marketplace
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -688,7 +708,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       WATERFALL_PORT: '3011'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_waterfall_engine
+      DB_NAME: daos_waterfall_engine
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -729,7 +751,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       SETTLEMENT_PORT: '3012'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_settlement
+      DB_NAME: daos_settlement
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -770,7 +794,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       COMPLIANCE_PORT: '3013'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_compliance
+      DB_NAME: daos_compliance
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -811,7 +837,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       REPORTING_PORT: '3014'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_reporting
+      DB_NAME: daos_reporting
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -852,7 +880,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       DOCUMENT_PORT: '3015'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_document_management
+      DB_NAME: daos_document_management
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -893,7 +923,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       NOTIFICATION_PORT: '3016'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_notification
+      DB_NAME: daos_notification
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -935,7 +967,9 @@ services:
       HOST: '127.0.0.1'
       WALLET_PORT: '3017'
       CAP_TABLE_PORT: '3021'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_wallet_custody
+      DB_NAME: daos_wallet_custody
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -977,7 +1011,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       PRICING_PORT: '3018'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_pricing_valuation
+      DB_NAME: daos_pricing_valuation
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -1018,7 +1054,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       RISK_PORT: '3019'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_risk_management
+      DB_NAME: daos_risk_management
+      DB_HOST: postgres
     networks:
       - mesh
       - infra
@@ -1059,7 +1097,9 @@ services:
     environment:
       HOST: '127.0.0.1'
       GOVERNANCE_PORT: '3020'
-      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos
+      DATABASE_URL: postgres://daos:daos_dev_password@postgres:5432/daos_governance
+      DB_NAME: daos_governance
+      DB_HOST: postgres
     networks:
       - mesh
       - infra

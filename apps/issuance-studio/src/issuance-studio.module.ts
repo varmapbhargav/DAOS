@@ -60,8 +60,8 @@ const queryHandlers = [GetIssuanceHandler, ListIssuancesHandler, GetWhitelistHan
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'issuance_studio',
+        database: config.get('DB_NAME', 'daos_issuance_studio'),
+
         entities: [IssuanceOrmEntity, MintRequestOrmEntity],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,

@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'outbox_events', schema: 'deal_studio' })
+@Entity({ name: 'outbox_events' })
 export class OutboxEventOrmEntity {
   @Column('uuid', { primary: true, name: 'event_id' })
   eventId!: string;

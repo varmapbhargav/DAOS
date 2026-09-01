@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity({ name: 'cap_tables', schema: 'reporting' })
+@Entity({ name: 'cap_tables' })
 export class CapTableEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

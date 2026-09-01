@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity({ name: 'nav_calculations', schema: 'reporting' })
+@Entity({ name: 'nav_calculations' })
 export class NavCalculationEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

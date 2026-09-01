@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'scenario_models', schema: 'opportunity_engineering' })
+@Entity({ name: 'scenario_models' })
 export class ScenarioModelOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -12,6 +12,9 @@ export class ScenarioModelOrmEntity {
   @Column({ name: 'opportunity_id', type: 'uuid' })
   opportunityId!: string;
 
+  @Column({ name: 'strategy_id', type: 'uuid', nullable: true })
+  strategyId!: string | null;
+
   @Column({ name: 'name', type: 'text' })
   name!: string;
 
@@ -21,17 +24,23 @@ export class ScenarioModelOrmEntity {
   @Column({ name: 'status', type: 'text', default: 'draft' })
   status!: string;
 
-  @Column({ name: 'key_assumptions', type: 'jsonb', default: '{}' })
-  keyAssumptions!: object;
+  @Column({ name: 'assumptions', type: 'jsonb', nullable: true })
+  assumptions!: object | null;
 
-  @Column({ name: 'projected_irr_percent', type: 'double precision', nullable: true })
-  projectedIrrPercent!: number | null;
+  @Column({ name: 'financial_model', type: 'jsonb', nullable: true })
+  financialModel!: object | null;
 
-  @Column({ name: 'projected_multiple', type: 'double precision', nullable: true })
-  projectedMultiple!: number | null;
+  @Column({ name: 'hold_period_months', type: 'integer', default: 60 })
+  holdPeriodMonths!: number;
 
-  @Column({ name: 'version', type: 'integer', default: 0 })
+  @Column({ name: 'is_selected', type: 'boolean', default: false })
+  isSelected!: boolean;
+
+  @Column({ name: 'version', type: 'integer', default: 1 })
   version!: number;
+
+  @Column({ name: 'versions', type: 'jsonb', default: '[]' })
+  versions!: object[];
 
   @Column({ name: 'created_at', type: 'timestamptz', default: () => 'NOW()' })
   createdAt!: Date;

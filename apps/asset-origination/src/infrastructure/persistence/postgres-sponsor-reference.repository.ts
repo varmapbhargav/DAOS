@@ -4,8 +4,8 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { SponsorReference } from '../../domain/entities/sponsor-reference.entity';
-import { SponsorReferenceOrmEntity } from './entities/sponsor-reference.orm-entity';
 import { SponsorReferenceRepository } from '../../domain/repositories/sponsor-reference.repository';
+import { SponsorReferenceOrmEntity } from './entities/sponsor-reference.orm-entity';
 
 @Injectable()
 export class PostgresSponsorReferenceRepository implements SponsorReferenceRepository {

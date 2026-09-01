@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'opportunities', schema: 'opportunity_engineering' })
+@Entity({ name: 'opportunities' })
 export class OpportunityOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -15,11 +15,17 @@ export class OpportunityOrmEntity {
   @Column({ name: 'name', type: 'text' })
   name!: string;
 
+  @Column({ name: 'description', type: 'text', nullable: true })
+  description!: string | null;
+
   @Column({ name: 'sponsor_id', type: 'uuid' })
   sponsorId!: string;
 
-  @Column({ name: 'status', type: 'text', default: 'engineered' })
+  @Column({ name: 'status', type: 'text', default: 'draft' })
   status!: string;
+
+  @Column({ name: 'sub_status', type: 'jsonb', nullable: true })
+  subStatus!: object | null;
 
   @Column({ name: 'target_return', type: 'jsonb', nullable: true })
   targetReturn!: object | null;
@@ -33,8 +39,8 @@ export class OpportunityOrmEntity {
   @Column({ name: 'scenario_model_ids', type: 'jsonb', default: '[]' })
   scenarioModelIds!: string[];
 
-  @Column({ name: 'approved_scenario_id', type: 'uuid', nullable: true })
-  approvedScenarioId!: string | null;
+  @Column({ name: 'selected_scenario_id', type: 'uuid', nullable: true })
+  selectedScenarioId!: string | null;
 
   @Column({ name: 'approved_by', type: 'uuid', nullable: true })
   approvedBy!: string | null;
@@ -42,7 +48,10 @@ export class OpportunityOrmEntity {
   @Column({ name: 'rejection_reason', type: 'text', nullable: true })
   rejectionReason!: string | null;
 
-  @Column({ name: 'version', type: 'integer', default: 0 })
+  @Column({ name: 'readiness', type: 'jsonb', nullable: true })
+  readiness!: object | null;
+
+  @Column({ name: 'version', type: 'integer', default: 1 })
   version!: number;
 
   @Column({ name: 'created_at', type: 'timestamptz', default: () => 'NOW()' })

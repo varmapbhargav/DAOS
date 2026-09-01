@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'roles', schema: 'tenant_identity' })
+@Entity({ name: 'roles' })
 export class RoleOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

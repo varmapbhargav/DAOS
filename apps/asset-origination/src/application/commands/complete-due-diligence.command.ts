@@ -2,8 +2,8 @@ import { AssetId, DDRating, NotFoundError, TenantContextHolder, TenantId } from 
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { CompleteDueDiligenceDto } from '../dto/asset-action.dto';
 
 export class CompleteDueDiligenceCommand {

@@ -42,8 +42,12 @@ export class ApproveScenarioHandler implements ICommandHandler<ApproveScenarioCo
       throw new NotFoundError(`Scenario model not found: ${command.scenarioModelId}`);
     }
 
-    model.approve();
-    opportunity.approveScenario(model.id.value);
+    if (model.opportunityId !== opportunity.id.value) {
+      throw new Error('Scenario model does not belong to this opportunity');
+    }
+
+    model.approve(TenantContextHolder.requireTenantId());
+    opportunity.selectScenario(model.id.value);
 
     await this.scenarios.save(model);
     await this.opportunities.save(opportunity);

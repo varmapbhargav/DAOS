@@ -1,12 +1,11 @@
 import { AssetDto } from '@daos/asset-api';
 import { NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { AssetId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { AssetId } from '@daos/shared-kernel';
-
-import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { toAssetDto } from '../asset.mapper';
 
 export class GetAssetQuery {

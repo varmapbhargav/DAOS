@@ -13,8 +13,8 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Asset } from '../../domain/aggregates/asset.aggregate';
-import { ASSET_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY, OUTBOX_PUBLISHER } from '../../domain/repositories/repository.tokens';
 import { CreateAssetDraftDto } from '../dto/asset-action.dto';
 
 export class CreateAssetDraftCommand {

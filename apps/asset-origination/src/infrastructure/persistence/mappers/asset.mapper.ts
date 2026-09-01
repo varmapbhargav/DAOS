@@ -14,8 +14,8 @@ import {
 } from '@daos/shared-kernel';
 
 import { Asset } from '../../../domain/aggregates/asset.aggregate';
-import { AssetOrmEntity } from '../entities/asset.orm-entity';
 import { SponsorReference } from '../../../domain/entities/sponsor-reference.entity';
+import { AssetOrmEntity } from '../entities/asset.orm-entity';
 
 type CollateralJson = {
   type: string;

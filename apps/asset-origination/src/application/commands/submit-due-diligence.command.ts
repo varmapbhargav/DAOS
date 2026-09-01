@@ -1,17 +1,16 @@
 import { NotFoundError, OutboxPublisher, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { AssetId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { AssetId } from '@daos/shared-kernel';
-
 import { DueDiligenceReport } from '../../domain/entities/due-diligence-report.entity';
+import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { DueDiligenceReportRepository } from '../../domain/repositories/due-diligence-report.repository';
 import {
   ASSET_REPOSITORY,
   DUE_DILIGENCE_REPORT_REPOSITORY,
   OUTBOX_PUBLISHER,
 } from '../../domain/repositories/repository.tokens';
-import { AssetRepository } from '../../domain/repositories/asset.repository';
-import { DueDiligenceReportRepository } from '../../domain/repositories/due-diligence-report.repository';
 
 export class SubmitDueDiligenceCommand {
   constructor(public readonly assetId: string) {}

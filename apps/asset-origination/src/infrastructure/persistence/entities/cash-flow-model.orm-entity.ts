@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'cash_flow_models', schema: 'asset_origination' })
+@Entity({ name: 'cash_flow_models' })
 export class CashFlowModelOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

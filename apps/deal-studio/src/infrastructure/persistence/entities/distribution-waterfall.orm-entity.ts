@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'distribution_waterfalls', schema: 'deal_studio' })
+@Entity({ name: 'distribution_waterfalls' })
 export class DistributionWaterfallOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

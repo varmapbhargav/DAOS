@@ -3,8 +3,8 @@ import { TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { toAssetDto } from '../asset.mapper';
 
 export class ListAssetsQuery {

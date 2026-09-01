@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'due_diligence_reports', schema: 'asset_origination' })
+@Entity({ name: 'due_diligence_reports' })
 export class DueDiligenceReportOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

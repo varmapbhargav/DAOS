@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import {
   AggregateRoot,
   AssetClass,
@@ -16,16 +18,15 @@ import {
   UtcInstant,
   ValuationMethodology,
 } from '@daos/shared-kernel';
-import { randomUUID } from 'node:crypto';
+import { AssetQualificationResult } from '@daos/shared-kernel';
 
+import { SponsorReference } from '../entities/sponsor-reference.entity';
 import { AssetApproved } from '../events/asset-approved.event';
 import { AssetOriginated } from '../events/asset-originated.event';
 import { AssetRejected } from '../events/asset-rejected.event';
 import { AssetStatusChanged } from '../events/asset-status-changed.event';
 import { DueDiligenceCompleted } from '../events/due-diligence-completed.event';
 import { ValuationUpdated } from '../events/valuation-updated.event';
-import { SponsorReference } from '../entities/sponsor-reference.entity';
-import { AssetQualificationResult } from '@daos/shared-kernel';
 
 export type AssetValuation = {
   fairValueMinorUnits: string;

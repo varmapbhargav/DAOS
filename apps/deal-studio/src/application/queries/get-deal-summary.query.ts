@@ -1,12 +1,10 @@
 import { NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { DealId } from '@daos/shared-kernel';
-
-import { DEAL_REPOSITORY } from '../../domain/repositories/repository.tokens';
-import { DealRepository } from '../../domain/repositories/deal.repository';
-import { DealDto, toDealDto } from '../deal.mapper';
+import { DealSummaryReadModel } from '../../infrastructure/persistence/entities/deal-summary-read-model.entity';
 
 export class GetDealSummaryQuery {
   constructor(public readonly dealId: string) {}
@@ -14,20 +12,25 @@ export class GetDealSummaryQuery {
 
 @QueryHandler(GetDealSummaryQuery)
 export class GetDealSummaryHandler implements IQueryHandler<GetDealSummaryQuery, any> {
-  constructor(@Inject(DEAL_REPOSITORY) private readonly deals: DealRepository) {}
+  constructor(
+    @InjectRepository(DealSummaryReadModel)
+    private readonly readModel: Repository<DealSummaryReadModel>,
+  ) {}
 
   async execute(query: GetDealSummaryQuery): Promise<any> {
     const tenantId = TenantId.create(TenantContextHolder.requireTenantId());
-    const deal = await this.deals.findById(tenantId, DealId.create(query.dealId));
-    if (!deal) throw new NotFoundError(`Deal not found: ${query.dealId}`);
+    const summary = await this.readModel.findOne({
+      where: { id: query.dealId, tenantId: tenantId.value },
+    });
+    if (!summary) throw new NotFoundError(`Deal not found: ${query.dealId}`);
 
     return {
-      id: deal.id.value,
-      name: deal.name,
-      status: deal.status,
-      version: deal.version,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      id: summary.id,
+      name: summary.name,
+      status: summary.status,
+      version: summary.version,
+      createdAt: summary.createdAt.toISOString(),
+      updatedAt: summary.updatedAt.toISOString(),
     };
   }
 }

@@ -21,11 +21,25 @@ export type SensitivityFactor = {
 };
 
 export type OpportunityStatus =
-  | 'engineered'
-  | 'scenarioApproved'
-  | 'scored'
+  | 'draft'
+  | 'engineering'
+  | 'thesis_defined'
+  | 'strategy_design'
+  | 'financial_modeling'
+  | 'scenario_modeling'
+  | 'analysis'
+  | 'optimization'
+  | 'recommended'
+  | 'ready_for_review'
+  | 'under_review'
+  | 'ready_for_approval'
   | 'approved'
-  | 'rejected';
+  | 'structuring_ready'
+  | 'handed_off'
+  | 'on_hold'
+  | 'rejected'
+  | 'archived'
+  | 'superseded';
 
 export type ScenarioType =
   | 'base'
@@ -34,3 +48,18 @@ export type ScenarioType =
   | 'stress'
   | 'conservative'
   | 'aggressive';
+
+export type ScenarioStatus =
+  | 'not_started'
+  | 'modeling'
+  | 'calculated'
+  | 'simulated'
+  | 'reviewed'
+  | 'selected'
+  | 'rejected'
+  | 'archived';
+
+export type EngineeringStatus =
+  | 'draft'
+  | 'in_progress'
+  | 'complete';

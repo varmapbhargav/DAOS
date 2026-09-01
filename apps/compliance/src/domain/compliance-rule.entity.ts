@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity({ name: 'compliance_rules', schema: 'compliance' })
+@Entity({ name: 'compliance_rules' })
 export class ComplianceRuleEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

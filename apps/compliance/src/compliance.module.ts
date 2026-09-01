@@ -24,8 +24,8 @@ import { RegulatoryController } from './interface/http/controllers/regulatory.co
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'compliance',
+        database: config.get('DB_NAME', 'daos_compliance'),
+
         autoLoadEntities: true,
       }),
       inject: [ConfigModule],

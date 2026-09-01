@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'share_classes', schema: 'product_design_studio' })
+@Entity({ name: 'share_classes' })
 export class ShareClassOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

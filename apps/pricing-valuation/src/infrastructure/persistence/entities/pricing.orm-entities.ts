@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'prices', schema: 'pricing_valuation' })
+@Entity({ name: 'prices' })
 export class PriceOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -38,7 +38,7 @@ export class PriceOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'price_history', schema: 'pricing_valuation' })
+@Entity({ name: 'price_history' })
 export class PriceHistoryOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -65,7 +65,7 @@ export class PriceHistoryOrmEntity {
   asOf!: string;
 }
 
-@Entity({ name: 'valuation_models', schema: 'pricing_valuation' })
+@Entity({ name: 'valuation_models' })
 export class ValuationModelOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

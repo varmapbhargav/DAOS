@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'subscriptions', schema: 'distribution' })
+@Entity({ name: 'subscriptions' })
 export class SubscriptionOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -51,7 +51,7 @@ export class SubscriptionOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'allocations', schema: 'distribution' })
+@Entity({ name: 'allocations' })
 export class AllocationOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -90,7 +90,7 @@ export class AllocationOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'capital_calls', schema: 'distribution' })
+@Entity({ name: 'capital_calls' })
 export class CapitalCallOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -132,7 +132,7 @@ export class CapitalCallOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'closings', schema: 'distribution' })
+@Entity({ name: 'closings' })
 export class ClosingOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

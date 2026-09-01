@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'listings', schema: 'marketplace' })
+@Entity({ name: 'listings' })
 export class ListingOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -51,7 +51,7 @@ export class ListingOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'orders', schema: 'marketplace' })
+@Entity({ name: 'orders' })
 export class OrderOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -100,7 +100,7 @@ export class OrderOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'trades', schema: 'marketplace' })
+@Entity({ name: 'trades' })
 export class TradeOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

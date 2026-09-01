@@ -75,3 +75,4 @@ export class DealEconomics {
   lock(): void {
     this._immutable = true;
   }
+}

@@ -1,11 +1,11 @@
 import { AssetLifecycleHistoryDto } from '@daos/asset-api';
 import { NotFoundError, TenantContextHolder, TenantId } from '@daos/shared-kernel';
+import { AssetId } from '@daos/shared-kernel';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { ASSET_LIFECYCLE_HISTORY_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { AssetLifecycleHistoryRepository } from '../../domain/repositories/asset-lifecycle-history.repository';
-import { AssetId } from '@daos/shared-kernel';
+import { ASSET_LIFECYCLE_HISTORY_REPOSITORY } from '../../domain/repositories/repository.tokens';
 
 export class GetAssetLifecycleHistoryQuery {
   constructor(public readonly assetId: string) {}

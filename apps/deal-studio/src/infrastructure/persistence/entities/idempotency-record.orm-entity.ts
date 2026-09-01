@@ -1,6 +1,6 @@
 import { Column, Entity } from 'typeorm';
 
-@Entity({ name: 'idempotency_records', schema: 'deal_studio' })
+@Entity({ name: 'idempotency_records' })
 export class IdempotencyRecordOrmEntity {
   @Column('text', { primary: true, name: 'key' })
   key!: string;

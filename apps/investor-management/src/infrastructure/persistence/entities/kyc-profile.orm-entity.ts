@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'kyc_profiles', schema: 'investor_management' })
+@Entity({ name: 'kyc_profiles' })
 export class KycProfileOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

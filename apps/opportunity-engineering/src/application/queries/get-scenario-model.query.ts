@@ -20,17 +20,26 @@ export class GetScenarioModelHandler implements IQueryHandler<GetScenarioModelQu
     if (!model) {
       throw new NotFoundError(`Scenario model not found: ${query.scenarioModelId}`);
     }
+    const irr = model.financialModel?.returnMetrics.irrPercent?.toNumber() ?? null;
+    const moic = model.financialModel?.returnMetrics.grossMoic?.toNumber() ?? null;
     return {
       id: model.id.value,
       tenantId: model.tenantId.value,
       opportunityId: model.opportunityId,
+      strategyId: model.strategyId,
       name: model.name,
       scenarioType: model.scenarioType,
       status: model.status,
-      keyAssumptions: model.keyAssumptions,
-      projectedIrrPercent: model.projectedIrrPercent,
-      projectedMultiple: model.projectedMultiple,
+      assumptions: model.assumptions,
+      financialModel: model.financialModel,
+      projectedIrrPercent: irr,
+      projectedMultiple: moic,
+      holdPeriodMonths: model.holdPeriodMonths,
+      isSelected: model.isSelected,
+      version: model.version,
+      versions: model.versions ?? [],
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
   }
 }

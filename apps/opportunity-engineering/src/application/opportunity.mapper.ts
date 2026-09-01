@@ -8,7 +8,9 @@ export function toOpportunityDto(opportunity: Opportunity): OpportunityDto {
     tenantId: opportunity.tenantId.value,
     assetId: opportunity.assetId,
     name: opportunity.name,
+    description: opportunity.description,
     status: opportunity.status,
+    subStatus: opportunity.subStatus,
     sponsorId: opportunity.sponsorId,
     targetReturn: opportunity.targetReturn
       ? {
@@ -22,7 +24,8 @@ export function toOpportunityDto(opportunity: Opportunity): OpportunityDto {
     score: opportunity.score,
     sensitivityFactors: opportunity.sensitivityFactors,
     modeledScenarioCount: opportunity.scenarioModelIds.length,
-    approvedScenarioId: opportunity.approvedScenarioId,
+    selectedScenarioId: opportunity.selectedScenarioId,
+    readiness: opportunity.readiness,
     version: opportunity.version,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

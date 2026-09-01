@@ -2,8 +2,8 @@ import { AssetId, NotFoundError, TenantContextHolder, TenantId, ValuationMethodo
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
+import { ASSET_REPOSITORY } from '../../domain/repositories/repository.tokens';
 import { CompleteValuationDto } from '../dto/asset-action.dto';
 
 export class CompleteValuationCommand {

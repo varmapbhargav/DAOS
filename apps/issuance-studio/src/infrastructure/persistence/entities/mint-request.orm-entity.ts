@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'mint_requests', schema: 'issuance_studio' })
+@Entity({ name: 'mint_requests' })
 export class MintRequestOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

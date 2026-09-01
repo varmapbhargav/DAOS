@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'term_sheets', schema: 'deal_studio' })
+@Entity({ name: 'term_sheets' })
 export class TermSheetOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity({ name: 'document_versions', schema: 'reporting' })
+@Entity({ name: 'document_versions' })
 export class DocumentVersionEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

@@ -6,8 +6,8 @@ import { DataSource } from 'typeorm';
 import { Asset } from '../../domain/aggregates/asset.aggregate';
 import { AssetRepository } from '../../domain/repositories/asset.repository';
 import { AssetOrmEntity } from './entities/asset.orm-entity';
-import { AssetMapper } from './mappers/asset.mapper';
 import { SponsorReferenceOrmEntity } from './entities/sponsor-reference.orm-entity';
+import { AssetMapper } from './mappers/asset.mapper';
 
 @Injectable()
 export class PostgresAssetRepository implements AssetRepository {

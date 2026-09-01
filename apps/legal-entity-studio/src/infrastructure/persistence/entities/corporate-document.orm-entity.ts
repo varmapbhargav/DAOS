@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'corporate_documents', schema: 'legal_entity_studio' })
+@Entity({ name: 'corporate_documents' })
 export class CorporateDocumentOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

@@ -69,8 +69,8 @@ const queryHandlers = [
         port: config.get('DB_PORT', 5432),
         username: config.get('DB_USER', 'daos'),
         password: config.get('DB_PASSWORD', 'daos_dev_password'),
-        database: config.get('DB_NAME', 'daos'),
-        schema: 'marketplace',
+        database: config.get('DB_NAME', 'daos_marketplace'),
+
         entities: [ListingOrmEntity, OrderOrmEntity, TradeOrmEntity],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,

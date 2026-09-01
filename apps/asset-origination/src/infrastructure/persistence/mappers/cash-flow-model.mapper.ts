@@ -1,4 +1,5 @@
 import { CashFlowModelId, Money, TenantId } from '@daos/shared-kernel';
+
 import { CashFlowModel, CashFlowRow } from '../../../domain/aggregates/cash-flow-model.aggregate';
 import { CashFlowModelOrmEntity } from '../entities/cash-flow-model.orm-entity';
 

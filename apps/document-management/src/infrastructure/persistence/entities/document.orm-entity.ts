@@ -2,7 +2,7 @@ import { Column, Entity, Index } from 'typeorm';
 
 import { DocumentVersionOrmRow } from './document-version.orm-row';
 
-@Entity({ name: 'documents', schema: 'document_management' })
+@Entity({ name: 'documents' })
 export class DocumentOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

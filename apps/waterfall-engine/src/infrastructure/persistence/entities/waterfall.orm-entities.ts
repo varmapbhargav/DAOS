@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 
-@Entity({ name: 'waterfall_models', schema: 'waterfall_engine' })
+@Entity({ name: 'waterfall_models' })
 export class WaterfallModelOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -36,7 +36,7 @@ export class WaterfallModelOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'distributions', schema: 'waterfall_engine' })
+@Entity({ name: 'distributions' })
 export class DistributionOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;
@@ -87,7 +87,7 @@ export class DistributionOrmEntity {
   updatedAt!: Date;
 }
 
-@Entity({ name: 'corporate_actions', schema: 'waterfall_engine' })
+@Entity({ name: 'corporate_actions' })
 export class CorporateActionOrmEntity {
   @Column('uuid', { primary: true })
   id!: string;

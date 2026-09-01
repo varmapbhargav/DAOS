@@ -14,9 +14,10 @@ export class PostgresOpportunityRepository implements OpportunityRepository {
 
   async save(opportunity: Opportunity): Promise<void> {
     const orm = OpportunityMapper.toOrm(opportunity);
+    const expectedVersion = opportunity.version - 1;
     await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${opportunity.tenantId.value}'`);
-      await manager
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [opportunity.tenantId.value]);
+      const result = await manager
         .getRepository(OpportunityOrmEntity)
         .createQueryBuilder()
         .insert()
@@ -41,12 +42,25 @@ export class PostgresOpportunityRepository implements OpportunityRepository {
           ['id'],
         )
         .execute();
+
+      if (expectedVersion > 0) {
+        const updated = await manager
+          .createQueryBuilder()
+          .update(OpportunityOrmEntity)
+          .set({ version: orm.version, updatedAt: new Date() })
+          .where('id = :id AND version = :expectedVersion', { id: orm.id, expectedVersion })
+          .execute();
+
+        if (updated.affected === 0) {
+          throw new Error('Optimistic lock failed: opportunity was modified by another process');
+        }
+      }
     });
   }
 
   async findById(tenantId: TenantId, id: OpportunityId): Promise<Opportunity | null> {
     const e = await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [tenantId.value]);
       return manager
         .getRepository(OpportunityOrmEntity)
         .findOne({ where: { tenantId: tenantId.value, id: id.value } });
@@ -56,7 +70,7 @@ export class PostgresOpportunityRepository implements OpportunityRepository {
 
   async findAll(tenantId: TenantId): Promise<Opportunity[]> {
     const entities = await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [tenantId.value]);
       return manager.getRepository(OpportunityOrmEntity).find({ where: { tenantId: tenantId.value } });
     });
     return entities.map(OpportunityMapper.toDomain);
@@ -64,7 +78,7 @@ export class PostgresOpportunityRepository implements OpportunityRepository {
 
   async findByAssetId(tenantId: TenantId, assetId: string): Promise<Opportunity | null> {
     const e = await this.ds.transaction(async (manager) => {
-      await manager.query(`SET LOCAL app.tenant_id = '${tenantId.value}'`);
+      await manager.query(`SET LOCAL app.tenant_id = $1`, [tenantId.value]);
       return manager
         .getRepository(OpportunityOrmEntity)
         .findOne({ where: { tenantId: tenantId.value, assetId } });
