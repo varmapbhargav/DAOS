@@ -585,3 +585,57 @@ export type EngineeringReadinessCheck =
   | 'CRITICAL_BLOCKERS'
   | 'HIGH_BLOCKERS'
   | 'OPEN_EXCEPTIONS';
+
+// ---------------------------------------------------------------------------
+// Asset Pooling
+// ---------------------------------------------------------------------------
+
+export type PoolType =
+  | 'REVOLVING'
+  | 'STATIC'
+  | 'DYNAMIC'
+  | 'WAREHOUSE'
+  | 'SECURITIZATION'
+  | 'FUND';
+
+export type PoolStrategy =
+  | 'DIVERSIFIED'
+  | 'SECTOR_FOCUSED'
+  | 'GEOGRAPHIC_FOCUSED'
+  | 'ASSET_CLASS_FOCUSED'
+  | 'YIELD_OPTIMIZED'
+  | 'RISK_BALANCED';
+
+export type PoolStatus =
+  | 'DRAFT'
+  | 'ACTIVE'
+  | 'CLOSED'
+  | 'LIQUIDATING'
+  | 'LIQUIDATED'
+  | 'SUSPENDED';
+
+export type ConcentrationRuleType =
+  | 'SINGLE_ASSET_MAX'
+  | 'SECTOR_MAX'
+  | 'GEOGRAPHY_MAX'
+  | 'COUNTERPARTY_MAX'
+  | 'ASSET_CLASS_MAX'
+  | 'CURRENCY_MAX'
+  | 'MATURITY_BUCKET_MAX';
+
+export type ConcentrationRule = {
+  type: ConcentrationRuleType;
+  limit: number; // percentage (0-100) or absolute value
+  scope?: string; // sector, geography, etc.
+};
+
+export type EligibilityPolicy = {
+  minAssetValue?: number;
+  maxAssetValue?: number;
+  allowedAssetClasses?: string[];
+  allowedJurisdictions?: string[];
+  requiredCreditRating?: string;
+  maxLTV?: number;
+  minSeasoningMonths?: number;
+  customRules?: Record<string, unknown>;
+};

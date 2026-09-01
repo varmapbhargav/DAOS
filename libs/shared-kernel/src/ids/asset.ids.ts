@@ -203,3 +203,19 @@ export class EngineeringReadinessId extends DomainId {
     return new EngineeringReadinessId(value ?? randomUUID());
   }
 }
+export class AssetPoolId extends DomainId {
+  private constructor(value: string) {
+    super(value);
+  }
+  static create(value?: string): AssetPoolId {
+    return new AssetPoolId(value ?? randomUUID());
+  }
+}
+export class PoolAssetId extends DomainId {
+  private constructor(value: string) {
+    super(value);
+  }
+  static create(value?: string): PoolAssetId {
+    return new PoolAssetId(value ?? randomUUID());
+  }
+}

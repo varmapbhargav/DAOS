@@ -15,6 +15,22 @@ import {
 } from './application/commands/approval-readiness.commands';
 import { ApproveAssetHandler } from './application/commands/approve-asset.command';
 import {
+  AddAssetToPoolHandler,
+  ChangePoolStatusHandler,
+  CheckEligibilityHandler,
+  CreateAssetPoolHandler,
+  MergePoolsHandler,
+  RebalancePoolHandler,
+  RemoveAssetFromPoolHandler,
+  SetParentPoolHandler,
+  SplitPoolHandler,
+  UpdateAssetAllocationHandler,
+  UpdateAssetPoolHandler,
+  UpdateConcentrationRulesHandler,
+  UpdateEligibilityPolicyHandler,
+  CreateAssetPoolHandler as CreateAssetPoolHandlerAlias,
+} from './application/commands/asset-pool.commands';
+import {
   CompleteTransferabilityAssessmentHandler,
   CreateClaimHandler,
   CreateCounterpartyHandler,
@@ -138,6 +154,13 @@ import {
   ListValuationsByCaseHandler,
 } from './application/queries/valuation.query';
 import {
+  GetAssetPoolByNameHandler,
+  GetAssetPoolHandler,
+  GetPoolAssetByAssetHandler,
+  ListAssetPoolsHandler,
+  ListPoolAssetsHandler,
+} from './application/queries/asset-pool.query';
+import {
   APPROVAL_CASE_REPOSITORY,
   APPROVAL_DECISION_REPOSITORY,
   ASSET_CLAIM_REPOSITORY,
@@ -149,6 +172,7 @@ import {
   ASSET_RIGHTS_REPOSITORY,
   ASSET_RISK_ASSESSMENT_REPOSITORY,
   ASSET_TRANSFERABILITY_REPOSITORY,
+  ASSET_POOL_REPOSITORY,
   BLOCKER_REPOSITORY,
   CASH_FLOW_MODEL_REPOSITORY,
   COMPLETENESS_RESULT_REPOSITORY,
@@ -161,6 +185,7 @@ import {
   ORIGINATION_CASE_REPOSITORY,
   OUTBOX_PUBLISHER,
   OWNERSHIP_REPOSITORY,
+  POOL_ASSET_REPOSITORY,
   QUALIFICATION_RESULT_REPOSITORY,
   RISK_ITEM_REPOSITORY,
   SCREENING_RESULT_REPOSITORY,
@@ -177,6 +202,7 @@ import { AssetClaimOrmEntity } from './infrastructure/persistence/entities/asset
 import { AssetCounterpartyOrmEntity } from './infrastructure/persistence/entities/asset-counterparty.orm-entity';
 import { AssetEncumbranceOrmEntity } from './infrastructure/persistence/entities/asset-encumbrance.orm-entity';
 import { AssetLifecycleHistoryOrmEntity } from './infrastructure/persistence/entities/asset-lifecycle-history.orm-entity';
+import { AssetPoolOrmEntity } from './infrastructure/persistence/entities/asset-pool.orm-entity';
 import { AssetProvenanceOrmEntity } from './infrastructure/persistence/entities/asset-provenance.orm-entity';
 import { AssetRightsOrmEntity } from './infrastructure/persistence/entities/asset-rights.orm-entity';
 import { AssetRiskAssessmentOrmEntity } from './infrastructure/persistence/entities/asset-risk-assessment.orm-entity';
