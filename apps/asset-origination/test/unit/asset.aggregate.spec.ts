@@ -1,7 +1,7 @@
 import { DDRating } from '@daos/shared-kernel';
 import { AssetClass, AssetId, AssetSubClass, Money, TenantId } from '@daos/shared-kernel';
 
-import { Asset } from '../../src/domain/aggregates/asset.aggregate';
+import { Asset } from '../../src/asset/domain/aggregates/asset.aggregate';
 
 const tenantId = TenantId.create('tenant-asset');
 const sponsorId = 'sponsor-1';

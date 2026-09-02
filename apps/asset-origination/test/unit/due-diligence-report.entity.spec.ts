@@ -1,6 +1,6 @@
 import { DDRating, DueDiligenceReportId, Finding, TenantId } from '@daos/shared-kernel';
 
-import { DueDiligenceReport } from '../../src/domain/entities/due-diligence-report.entity';
+import { DueDiligenceReport } from '../../src/due-diligence/domain/entities/due-diligence-report.entity';
 
 const tenantId = TenantId.create('tenant-dd');
 

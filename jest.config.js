@@ -3,7 +3,9 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/apps', '<rootDir>/libs'],
   testMatch: ['**/*.spec.ts', '**/*.e2e-spec.ts'],
+  transformIgnorePatterns: ['node_modules/(?!(?:@nestjs/typeorm)/)'],
   moduleNameMapper: {
+    '^@nestjs/typeorm$': '<rootDir>/jest/stubs/nestjs-typeorm.js',
     '^@daos/shared-kernel/(.*)$': '<rootDir>/libs/shared-kernel/src/$1',
     '^@daos/shared-kernel$': '<rootDir>/libs/shared-kernel/src',
     '^@daos/identity-api/(.*)$': '<rootDir>/libs/identity-api/src/$1',

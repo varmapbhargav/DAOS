@@ -535,7 +535,12 @@ export type ValuationMethodology =
   | 'PRECEDENT_TRANSACTIONS'
   | 'APPRaisal'
   | 'BROKER_OPINION'
-  | 'OTHER';
+  | 'OTHER'
+  | 'dcf'
+  | 'comps'
+  | 'nav'
+  | 'costApproach'
+  | 'incomeApproach';
 
 export type ValuationCurrency = 'USD' | 'EUR' | 'GBP' | 'CHF' | 'JPY' | 'CAD' | 'AUD' | 'SGD' | 'HKD';
 
