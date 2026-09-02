@@ -219,3 +219,19 @@ export class PoolAssetId extends DomainId {
     return new PoolAssetId(value ?? randomUUID());
   }
 }
+export class InteractionId extends DomainId {
+  private constructor(value: string) {
+    super(value);
+  }
+  static create(value?: string): InteractionId {
+    return new InteractionId(value ?? randomUUID());
+  }
+}
+export class TaskId extends DomainId {
+  private constructor(value: string) {
+    super(value);
+  }
+  static create(value?: string): TaskId {
+    return new TaskId(value ?? randomUUID());
+  }
+}

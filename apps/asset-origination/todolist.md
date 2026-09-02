@@ -1131,19 +1131,19 @@ Answer:
 
 Implement policy-driven screening.
 
--   [ ] Asset eligibility.
--   [ ] Asset class eligibility.
--   [ ] Jurisdiction eligibility.
--   [ ] Minimum/maximum asset size.
--   [ ] Ownership requirements.
--   [ ] Documentation requirements.
--   [ ] Regulatory restrictions.
--   [ ] Transferability requirements.
--   [ ] Counterparty requirements.
--   [ ] Data completeness requirements.
--   [ ] Prohibited asset rules.
--   [ ] Concentration rules.
--   [ ] Source eligibility.
+-   [x] Asset eligibility.
+-   [x] Asset class eligibility.
+-   [x] Jurisdiction eligibility.
+-   [x] Minimum/maximum asset size.
+-   [x] Ownership requirements.
+-   [x] Documentation requirements.
+-   [x] Regulatory restrictions.
+-   [x] Transferability requirements.
+-   [x] Counterparty requirements.
+-   [x] Data completeness requirements.
+-   [x] Prohibited asset rules.
+-   [x] Concentration rules.
+-   [x] Source eligibility.
 
 ## 20.2 Screening policy
 
@@ -1151,28 +1151,28 @@ Create:
 
 `ScreeningPolicy`
 
--   [ ] Policy ID.
--   [ ] Version.
--   [ ] Tenant.
--   [ ] Asset classes.
--   [ ] Jurisdictions.
--   [ ] Conditions.
--   [ ] Rule severity.
--   [ ] Required evidence.
--   [ ] Effective date.
--   [ ] Expiry.
+-   [x] Policy ID.
+-   [x] Version.
+-   [x] Tenant.
+-   [x] Asset classes.
+-   [x] Jurisdictions.
+-   [x] Conditions.
+-   [x] Rule severity.
+-   [x] Required evidence.
+-   [x] Effective date.
+-   [x] Expiry.
 
 ## 20.3 Screening result
 
--   [ ] Pass.
--   [ ] Fail.
--   [ ] Conditional.
--   [ ] Manual review.
--   [ ] Rule-by-rule result.
--   [ ] Evidence.
--   [ ] Exceptions.
--   [ ] Reviewer.
--   [ ] Timestamp.
+-   [x] Pass.
+-   [x] Fail.
+-   [x] Conditional.
+-   [x] Manual review.
+-   [x] Rule-by-rule result.
+-   [x] Evidence.
+-   [x] Exceptions.
+-   [x] Reviewer.
+-   [x] Timestamp.
 
 ------------------------------------------------------------------------
 
@@ -1185,20 +1185,20 @@ Qualification should answer:
 
 Criteria:
 
--   [ ] Identity completeness.
--   [ ] Ownership verification.
--   [ ] Existence verification.
--   [ ] Provenance quality.
--   [ ] Legal rights.
--   [ ] Transferability.
--   [ ] Documentation completeness.
--   [ ] Counterparty verification.
--   [ ] Jurisdiction eligibility.
--   [ ] Regulatory eligibility.
--   [ ] Data quality.
--   [ ] Valuation availability.
--   [ ] Critical DD issues.
--   [ ] Open exceptions.
+-   [x] Identity completeness.
+-   [x] Ownership verification.
+-   [x] Existence verification.
+-   [x] Provenance quality.
+-   [x] Legal rights.
+-   [x] Transferability.
+-   [x] Documentation completeness.
+-   [x] Counterparty verification.
+-   [x] Jurisdiction eligibility.
+-   [x] Regulatory eligibility.
+-   [x] Data quality.
+-   [x] Valuation availability.
+-   [x] Critical DD issues.
+-   [x] Open exceptions.
 
 Do NOT use qualification for:
 
@@ -1215,17 +1215,17 @@ Do NOT use qualification for:
 
 Calculate:
 
--   [ ] Identity completeness.
--   [ ] Ownership completeness.
--   [ ] Rights completeness.
--   [ ] Evidence completeness.
--   [ ] Legal completeness.
--   [ ] Counterparty completeness.
--   [ ] Financial data completeness.
--   [ ] Valuation completeness.
--   [ ] DD completeness.
--   [ ] Risk completeness.
--   [ ] Compliance completeness.
+-   [x] Identity completeness.
+-   [x] Ownership completeness.
+-   [x] Rights completeness.
+-   [x] Evidence completeness.
+-   [x] Legal completeness.
+-   [x] Counterparty completeness.
+-   [x] Financial data completeness.
+-   [x] Valuation completeness.
+-   [x] DD completeness.
+-   [x] Risk completeness.
+-   [x] Compliance completeness.
 
 Example:
 
@@ -1250,15 +1250,15 @@ Overall                89%
 
 Every case should expose:
 
--   [ ] Critical blockers.
--   [ ] High blockers.
--   [ ] Medium blockers.
--   [ ] Informational gaps.
--   [ ] Owner.
--   [ ] Due date.
--   [ ] Resolution action.
--   [ ] Evidence.
--   [ ] Resolution status.
+-   [x] Critical blockers.
+-   [x] High blockers.
+-   [x] Medium blockers.
+-   [x] Informational gaps.
+-   [x] Owner.
+-   [x] Due date.
+-   [x] Resolution action.
+-   [x] Evidence.
+-   [x] Resolution status.
 
 Example:
 
@@ -1328,54 +1328,54 @@ Create `DueDiligenceCase`.
 
 ## 26.1 DD categories
 
--   [ ] Legal.
--   [ ] Financial.
--   [ ] Tax.
--   [ ] Commercial.
--   [ ] Regulatory.
--   [ ] Operational.
--   [ ] Technical.
--   [ ] ESG.
--   [ ] Insurance.
--   [ ] Cyber.
--   [ ] Digital asset.
--   [ ] Custody.
--   [ ] Smart contract.
+-   [x] Legal.
+-   [x] Financial.
+-   [x] Tax.
+-   [x] Commercial.
+-   [x] Regulatory.
+-   [x] Operational.
+-   [x] Technical.
+-   [x] ESG.
+-   [x] Insurance.
+-   [x] Cyber.
+-   [x] Digital asset.
+-   [x] Custody.
+-   [x] Smart contract.
 
 ## 26.2 DD program
 
--   [ ] DD template.
--   [ ] Asset-class-specific checklist.
--   [ ] Jurisdiction-specific checklist.
--   [ ] Materiality thresholds.
--   [ ] Mandatory evidence.
--   [ ] Reviewer assignment.
--   [ ] Due dates.
--   [ ] SLA.
--   [ ] Escalation.
+-   [x] DD template.
+-   [x] Asset-class-specific checklist.
+-   [x] Jurisdiction-specific checklist.
+-   [x] Materiality thresholds.
+-   [x] Mandatory evidence.
+-   [x] Reviewer assignment.
+-   [x] Due dates.
+-   [x] SLA.
+-   [x] Escalation.
 
 ## 26.3 DD finding
 
--   [ ] Finding ID.
--   [ ] Category.
--   [ ] Severity.
--   [ ] Description.
--   [ ] Evidence.
--   [ ] Impact.
--   [ ] Recommendation.
--   [ ] Remediation.
--   [ ] Owner.
--   [ ] Due date.
--   [ ] Status.
--   [ ] Reviewer.
+-   [x] Finding ID.
+-   [x] Category.
+-   [x] Severity.
+-   [x] Description.
+-   [x] Evidence.
+-   [x] Impact.
+-   [x] Recommendation.
+-   [x] Remediation.
+-   [x] Owner.
+-   [x] Due date.
+-   [x] Status.
+-   [x] Reviewer.
 
 Severity:
 
--   [ ] Critical.
--   [ ] High.
--   [ ] Medium.
--   [ ] Low.
--   [ ] Informational.
+-   [x] Critical.
+-   [x] High.
+-   [x] Medium.
+-   [x] Low.
+-   [x] Informational.
 
 ------------------------------------------------------------------------
 
@@ -1385,31 +1385,31 @@ Severity:
 
 Capture:
 
--   [ ] Current market value.
--   [ ] Fair value.
--   [ ] Book value.
--   [ ] NAV.
--   [ ] Face value.
--   [ ] Outstanding principal.
--   [ ] Indicative acquisition value.
--   [ ] Purchase price.
--   [ ] Valuation date.
--   [ ] Valuation source.
--   [ ] Valuer.
--   [ ] Methodology.
--   [ ] Confidence.
--   [ ] Currency.
+-   [x] Current market value.
+-   [x] Fair value.
+-   [x] Book value.
+-   [x] NAV.
+-   [x] Face value.
+-   [x] Outstanding principal.
+-   [x] Indicative acquisition value.
+-   [x] Purchase price.
+-   [x] Valuation date.
+-   [x] Valuation source.
+-   [x] Valuer.
+-   [x] Methodology.
+-   [x] Confidence.
+-   [x] Currency.
 
 ## 27.2 Valuation workflow
 
--   [ ] Request valuation.
--   [ ] Assign valuer.
--   [ ] Upload valuation.
--   [ ] Review valuation.
--   [ ] Approve valuation.
--   [ ] Reject valuation.
--   [ ] Revalue.
--   [ ] Maintain valuation history.
+-   [x] Request valuation.
+-   [x] Assign valuer.
+-   [x] Upload valuation.
+-   [x] Review valuation.
+-   [x] Approve valuation.
+-   [x] Reject valuation.
+-   [x] Revalue.
+-   [x] Maintain valuation history.
 
 ## 27.3 Keep out of Origination
 
@@ -1430,35 +1430,35 @@ Create `AssetRiskAssessment`.
 
 Risk categories:
 
--   [ ] Ownership risk.
--   [ ] Legal risk.
--   [ ] Documentation risk.
--   [ ] Counterparty risk.
--   [ ] Jurisdiction risk.
--   [ ] Regulatory eligibility risk.
--   [ ] Valuation confidence risk.
--   [ ] Data quality risk.
--   [ ] Operational risk.
--   [ ] Asset-specific market risk.
--   [ ] Technology risk.
--   [ ] Smart contract risk.
--   [ ] Custody risk.
--   [ ] Concentration risk.
--   [ ] Fraud/provenance risk.
+-   [x] Ownership risk.
+-   [x] Legal risk.
+-   [x] Documentation risk.
+-   [x] Counterparty risk.
+-   [x] Jurisdiction risk.
+-   [x] Regulatory eligibility risk.
+-   [x] Valuation confidence risk.
+-   [x] Data quality risk.
+-   [x] Operational risk.
+-   [x] Asset-specific market risk.
+-   [x] Technology risk.
+-   [x] Smart contract risk.
+-   [x] Custody risk.
+-   [x] Concentration risk.
+-   [x] Fraud/provenance risk.
 
 For every risk:
 
--   [ ] Risk ID.
--   [ ] Category.
--   [ ] Description.
--   [ ] Probability.
--   [ ] Impact.
--   [ ] Score.
--   [ ] Mitigation.
--   [ ] Owner.
--   [ ] Due date.
--   [ ] Evidence.
--   [ ] Status.
+-   [x] Risk ID.
+-   [x] Category.
+-   [x] Description.
+-   [x] Probability.
+-   [x] Impact.
+-   [x] Score.
+-   [x] Mitigation.
+-   [x] Owner.
+-   [x] Due date.
+-   [x] Evidence.
+-   [x] Status.
 
 ------------------------------------------------------------------------
 
@@ -1468,27 +1468,27 @@ Implement:
 
 ``` text
 DRAFT
- ↓
+  ↓
 SUBMITTED
- ↓
+  ↓
 INTAKE
- ↓
+  ↓
 SCREENING
- ↓
+  ↓
 QUALIFICATION
- ↓
+  ↓
 DUE_DILIGENCE
- ↓
+  ↓
 VALUATION
- ↓
+  ↓
 ASSET_RISK_REVIEW
- ↓
+  ↓
 READY_FOR_APPROVAL
- ↓
+  ↓
 APPROVAL_IN_PROGRESS
- ↓
+  ↓
 APPROVED
- ↓
+  ↓
 ENGINEERING_READY
 ```
 
@@ -1501,17 +1501,17 @@ Exception states:
 
 Approval model:
 
--   [ ] Single approver.
--   [ ] Multi-level approval.
--   [ ] Parallel approval.
--   [ ] Sequential approval.
--   [ ] Conditional approval.
--   [ ] Delegated authority.
--   [ ] Approval thresholds.
--   [ ] Conflict-of-interest check.
--   [ ] Approval evidence.
--   [ ] Approval timestamp.
--   [ ] Rejection reason.
+-   [x] Single approver.
+-   [x] Multi-level approval.
+-   [x] Parallel approval.
+-   [x] Sequential approval.
+-   [x] Conditional approval.
+-   [x] Delegated authority.
+-   [x] Approval thresholds.
+-   [x] Conflict-of-interest check.
+-   [x] Approval evidence.
+-   [x] Approval timestamp.
+-   [x] Rejection reason.
 
 ------------------------------------------------------------------------
 
@@ -1521,22 +1521,22 @@ Create `EngineeringReadinessAssessment`.
 
 Checks:
 
--   [ ] Asset identity.
--   [ ] Ownership.
--   [ ] Beneficial ownership.
--   [ ] Legal rights.
--   [ ] Transferability.
--   [ ] Provenance.
--   [ ] Evidence.
--   [ ] Counterparties.
--   [ ] Compliance.
--   [ ] DD.
--   [ ] Valuation.
--   [ ] Asset risk.
--   [ ] Data completeness.
--   [ ] Critical blockers.
--   [ ] High blockers.
--   [ ] Open exceptions.
+-   [x] Asset identity.
+-   [x] Ownership.
+-   [x] Beneficial ownership.
+-   [x] Legal rights.
+-   [x] Transferability.
+-   [x] Provenance.
+-   [x] Evidence.
+-   [x] Counterparties.
+-   [x] Compliance.
+-   [x] DD.
+-   [x] Valuation.
+-   [x] Asset risk.
+-   [x] Data completeness.
+-   [x] Critical blockers.
+-   [x] High blockers.
+-   [x] Open exceptions.
 
 Output:
 
@@ -1556,32 +1556,32 @@ Publish:
 
 Create `AssetPool`.
 
--   [ ] Pool ID.
--   [ ] Pool name.
--   [ ] Pool type.
--   [ ] Pool strategy.
--   [ ] Eligibility policy.
--   [ ] Constituent assets.
--   [ ] Concentration rules.
--   [ ] Gross value.
--   [ ] Net value.
--   [ ] Outstanding value.
--   [ ] Currency.
--   [ ] Jurisdictions.
--   [ ] Weighted average maturity.
--   [ ] Weighted average LTV.
--   [ ] Concentration.
--   [ ] Pool status.
+-   [x] Pool ID.
+-   [x] Pool name.
+-   [x] Pool type.
+-   [x] Pool strategy.
+-   [x] Eligibility policy.
+-   [x] Constituent assets.
+-   [x] Concentration rules.
+-   [x] Gross value.
+-   [x] Net value.
+-   [x] Outstanding value.
+-   [x] Currency.
+-   [x] Jurisdictions.
+-   [x] Weighted average maturity.
+-   [x] Weighted average LTV.
+-   [x] Concentration.
+-   [x] Pool status.
 
 Support:
 
--   [ ] Add asset.
--   [ ] Remove asset.
--   [ ] Split pool.
--   [ ] Merge pool.
--   [ ] Rebalance.
--   [ ] Eligibility calculation.
--   [ ] Pool versioning.
+-   [x] Add asset.
+-   [x] Remove asset.
+-   [x] Split pool.
+-   [x] Merge pool.
+-   [x] Rebalance.
+-   [x] Eligibility calculation.
+-   [x] Pool versioning.
 
 ------------------------------------------------------------------------
 
@@ -1591,22 +1591,22 @@ Create `Interaction`.
 
 Types:
 
--   [ ] Email.
--   [ ] Meeting.
--   [ ] Call.
--   [ ] Message.
--   [ ] Data request.
--   [ ] Document request.
--   [ ] Site visit.
--   [ ] Negotiation.
--   [ ] Review.
+-   [x] Email.
+-   [x] Meeting.
+-   [x] Call.
+-   [x] Message.
+-   [x] Data request.
+-   [x] Document request.
+-   [x] Site visit.
+-   [x] Negotiation.
+-   [x] Review.
 
 Link to:
 
--   [ ] Origination Case.
--   [ ] Asset.
--   [ ] Source.
--   [ ] Counterparty.
+-   [x] Origination Case.
+-   [x] Asset.
+-   [x] Source.
+-   [x] Counterparty.
 
 ------------------------------------------------------------------------
 
@@ -1614,28 +1614,28 @@ Link to:
 
 Create task engine.
 
--   [ ] Task.
--   [ ] Owner.
--   [ ] Assignee.
--   [ ] Priority.
--   [ ] SLA.
--   [ ] Due date.
--   [ ] Dependency.
--   [ ] Status.
--   [ ] Evidence.
--   [ ] Escalation.
+-   [x] Task.
+-   [x] Owner.
+-   [x] Assignee.
+-   [x] Priority.
+-   [x] SLA.
+-   [x] Due date.
+-   [x] Dependency.
+-   [x] Status.
+-   [x] Evidence.
+-   [x] Escalation.
 
 Task types:
 
--   [ ] Request document.
--   [ ] Verify ownership.
--   [ ] Legal review.
--   [ ] Compliance review.
--   [ ] DD.
--   [ ] Valuation.
--   [ ] Risk review.
--   [ ] Approval.
--   [ ] Resolve blocker.
+-   [x] Request document.
+-   [x] Verify ownership.
+-   [x] Legal review.
+-   [x] Compliance review.
+-   [x] DD.
+-   [x] Valuation.
+-   [x] Risk review.
+-   [x] Approval.
+-   [x] Resolve blocker.
 
 ------------------------------------------------------------------------
 

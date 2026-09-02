@@ -88,6 +88,16 @@ import { QualifyAssetHandler } from './application/commands/qualify-asset.comman
 import { RejectAssetHandler } from './application/commands/reject-asset.command';
 import { ResumeAssetHandler } from './application/commands/resume-asset.command';
 import {
+  AssignTaskHandler,
+  AddTaskDependencyHandler,
+  CancelTaskHandler,
+  CompleteTaskHandler,
+  CreateTaskHandler,
+  EscalateTaskHandler,
+  RecordInteractionHandler,
+  UpdateTaskHandler,
+} from './application/commands/interaction-task.commands';
+import {
   OverrideScreeningHandler,
   RunQualificationHandler,
   RunScreeningHandler,
@@ -161,6 +171,12 @@ import {
   ListPoolAssetsHandler,
 } from './application/queries/asset-pool.query';
 import {
+  GetInteractionHandler,
+  GetTaskHandler,
+  ListInteractionsHandler,
+  ListTasksHandler,
+} from './application/queries/interaction-task.query';
+import {
   APPROVAL_CASE_REPOSITORY,
   APPROVAL_DECISION_REPOSITORY,
   ASSET_CLAIM_REPOSITORY,
@@ -172,7 +188,7 @@ import {
   ASSET_RIGHTS_REPOSITORY,
   ASSET_RISK_ASSESSMENT_REPOSITORY,
   ASSET_TRANSFERABILITY_REPOSITORY,
-  ASSET_POOL_REPOSITORY,
+ASSET_POOL_REPOSITORY,
   BLOCKER_REPOSITORY,
   CASH_FLOW_MODEL_REPOSITORY,
   COMPLETENESS_RESULT_REPOSITORY,
@@ -182,6 +198,7 @@ import {
   DUE_DILIGENCE_REPORT_REPOSITORY,
   ENGINEERING_READINESS_REPOSITORY,
   EVIDENCE_REPOSITORY,
+  INTERACTION_REPOSITORY,
   ORIGINATION_CASE_REPOSITORY,
   OUTBOX_PUBLISHER,
   OWNERSHIP_REPOSITORY,
@@ -191,6 +208,7 @@ import {
   SCREENING_RESULT_REPOSITORY,
   SPONSOR_REFERENCE_REPOSITORY,
   SUBMISSION_REPOSITORY,
+  TASK_REPOSITORY,
   VALUATION_ENGINE,
   VALUATION_REPOSITORY,
 } from './domain/repositories/repository.tokens';
@@ -214,6 +232,8 @@ import { DataRequestOrmEntity } from './infrastructure/persistence/entities/data
 import { DdFindingOrmEntity } from './infrastructure/persistence/entities/dd-finding.orm-entity';
 import { DueDiligenceCaseOrmEntity } from './infrastructure/persistence/entities/due-diligence-case.orm-entity';
 import { DueDiligenceReportOrmEntity } from './infrastructure/persistence/entities/due-diligence-report.orm-entity';
+import { InteractionOrmEntity } from './infrastructure/persistence/entities/interaction.orm-entity';
+import { TaskOrmEntity } from './infrastructure/persistence/entities/task.orm-entity';
 import { EngineeringReadinessOrmEntity } from './infrastructure/persistence/entities/engineering-readiness.orm-entity';
 import { EvidenceOrmEntity } from './infrastructure/persistence/entities/evidence.orm-entity';
 import { OriginationCaseOrmEntity } from './infrastructure/persistence/entities/origination-case.orm-entity';
@@ -245,6 +265,8 @@ import { PostgresDataRequestRepository } from './infrastructure/persistence/post
 import { PostgresDdFindingRepository } from './infrastructure/persistence/postgres-dd-finding.repository';
 import { PostgresDueDiligenceCaseRepository } from './infrastructure/persistence/postgres-due-diligence-case.repository';
 import { PostgresDueDiligenceReportRepository } from './infrastructure/persistence/postgres-due-diligence-report.repository';
+import { PostgresInteractionRepository } from './infrastructure/persistence/postgres-interaction.repository';
+import { PostgresTaskRepository } from './infrastructure/persistence/postgres-task.repository';
 import { PostgresEngineeringReadinessRepository } from './infrastructure/persistence/postgres-engineering-readiness.repository';
 import { PostgresEvidenceRepository } from './infrastructure/persistence/postgres-evidence.repository';
 import { PostgresOriginationCaseRepository } from './infrastructure/persistence/postgres-origination-case.repository';
@@ -263,7 +285,9 @@ import {
 } from './interface/http/controllers/asset-profile.controller';
 import { DueDiligenceController } from './interface/http/controllers/due-diligence.controller';
 import { AssetPoolController } from './interface/http/controllers/asset-pool.controller';
+import { InteractionController } from './interface/http/controllers/interaction-task.controller';
 import { OriginationCaseController } from './interface/http/controllers/origination-case.controller';
+import { TaskController } from './interface/http/controllers/interaction-task.controller';
 import { DomainExceptionFilter } from './interface/http/filters/domain-exception.filter';
 import { TenantContextInterceptor } from './interface/http/interceptors/tenant-context.interceptor';
 
@@ -356,6 +380,14 @@ const commandHandlers = [
   UpdateEligibilityPolicyHandler,
   CheckEligibilityHandler,
   SetParentPoolHandler,
+  RecordInteractionHandler,
+  CreateTaskHandler,
+  UpdateTaskHandler,
+  AssignTaskHandler,
+  AddTaskDependencyHandler,
+  EscalateTaskHandler,
+  CompleteTaskHandler,
+  CancelTaskHandler,
 ];
 
 const queryHandlers = [
@@ -394,6 +426,10 @@ const queryHandlers = [
   ListAssetPoolsHandler,
   ListPoolAssetsHandler,
   GetPoolAssetByAssetHandler,
+  GetInteractionHandler,
+  GetTaskHandler,
+  ListInteractionsHandler,
+  ListTasksHandler,
 ];
 
 @Module({
@@ -442,6 +478,8 @@ const queryHandlers = [
           EngineeringReadinessOrmEntity,
           AssetPoolOrmEntity,
           PoolAssetOrmEntity,
+          InteractionOrmEntity,
+          TaskOrmEntity,
         ],
         synchronize: config.get('DB_SYNC', 'false') === 'true',
         autoLoadEntities: true,
@@ -453,7 +491,9 @@ const queryHandlers = [
     AssetController,
     AssetPoolController,
     DueDiligenceController,
+    InteractionController,
     OriginationCaseController,
+    TaskController,
     AssetProfileController,
     CaseDataRequestController,
   ],
@@ -488,6 +528,8 @@ const queryHandlers = [
     { provide: APPROVAL_CASE_REPOSITORY, useClass: PostgresApprovalCaseRepository },
     { provide: APPROVAL_DECISION_REPOSITORY, useClass: PostgresApprovalDecisionRepository },
     { provide: ENGINEERING_READINESS_REPOSITORY, useClass: PostgresEngineeringReadinessRepository },
+    { provide: INTERACTION_REPOSITORY, useClass: PostgresInteractionRepository },
+    { provide: TASK_REPOSITORY, useClass: PostgresTaskRepository },
     { provide: VALUATION_ENGINE, useClass: StubValuationAdapter },
     { provide: OUTBOX_PUBLISHER, useClass: InMemoryOutboxPublisher },
     { provide: APP_INTERCEPTOR, useClass: TenantContextInterceptor },

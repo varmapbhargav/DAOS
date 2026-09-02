@@ -534,3 +534,502 @@ export class RunMonteCarloDto {
   @Type(() => MonteCarloConfigDto)
   config!: MonteCarloConfigDto;
 }
+
+export class ExitStrategyDto {
+  @ApiProperty({ enum: ['sale', 'refinancing', 'ipo', 'secondary_sale', 'redemption', 'maturity', 'recapitalization'] })
+  @IsString()
+  type!: 'sale' | 'refinancing' | 'ipo' | 'secondary_sale' | 'redemption' | 'maturity' | 'recapitalization';
+
+  @ApiProperty()
+  @IsString()
+  targetDate!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  targetValue!: number;
+
+  @ApiProperty({ type: Object })
+  @IsObject()
+  assumptions!: Record<string, unknown>;
+
+  @ApiProperty()
+  @IsNumber()
+  probability!: number;
+}
+
+export class InvestmentThesisDto {
+  @ApiProperty()
+  @IsString()
+  thesisStatement!: string;
+
+  @ApiProperty()
+  @IsString()
+  executiveSummary!: string;
+
+  @ApiProperty()
+  @IsString()
+  investmentRationale!: string;
+
+  @ApiProperty()
+  @IsString()
+  marketOpportunity!: string;
+
+  @ApiProperty()
+  @IsString()
+  assetRationale!: string;
+
+  @ApiProperty()
+  @IsString()
+  problem!: string;
+
+  @ApiProperty()
+  @IsString()
+  solution!: string;
+
+  @ApiProperty()
+  @IsString()
+  competitiveAdvantage!: string;
+
+  @ApiProperty()
+  @IsString()
+  valueCreationThesis!: string;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  keyCatalysts!: string[];
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  keyRisks!: string[];
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  riskMitigation!: string[];
+
+  @ApiProperty()
+  @IsNumber()
+  investmentHorizonMonths!: number;
+
+  @ApiProperty()
+  @IsString()
+  entryThesis!: string;
+
+  @ApiProperty({ type: ExitStrategyDto })
+  @ValidateNested()
+  @Type(() => ExitStrategyDto)
+  exitStrategy!: ExitStrategyDto;
+
+  @ApiProperty()
+  @IsNumber()
+  expectedReturn!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  targetYield!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  confidenceScore!: number;
+}
+
+export class StrategyConstraintDto {
+  @ApiProperty()
+  @IsString()
+  id!: string;
+
+  @ApiProperty({ enum: ['max_leverage', 'min_irr', 'min_moic', 'max_hold_period', 'max_downside', 'min_liquidity', 'jurisdiction_restriction', 'investment_amount', 'risk_tolerance'] })
+  @IsString()
+  type!: 'max_leverage' | 'min_irr' | 'min_moic' | 'max_hold_period' | 'max_downside' | 'min_liquidity' | 'jurisdiction_restriction' | 'investment_amount' | 'risk_tolerance';
+
+  @ApiProperty()
+  @IsString()
+  name!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  value!: number;
+
+  @ApiProperty()
+  @IsString()
+  unit!: string;
+
+  @ApiProperty()
+  @IsString()
+  description!: string;
+}
+
+export class StrategyEntryDto {
+  @ApiProperty()
+  @IsString()
+  approach!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  targetPrice!: number;
+
+  @ApiProperty()
+  @IsString()
+  timing!: string;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  conditions!: string[];
+}
+
+export class StrategyOperatingDto {
+  @ApiProperty()
+  @IsString()
+  valueCreationPlan!: string;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  operationalImprovements!: string[];
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  managementChanges!: string[];
+
+  @ApiProperty()
+  @IsNumber()
+  capexPlan!: number;
+}
+
+export class StrategyFinancingDto {
+  @ApiProperty()
+  @IsString()
+  structure!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  leverageTarget!: number;
+
+  @ApiProperty()
+  @IsString()
+  debtType!: string;
+
+  @ApiProperty()
+  @IsString()
+  equityStructure!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  preferredReturn!: number;
+}
+
+export class StrategyValueCreationDto {
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  drivers!: string[];
+
+  @ApiProperty()
+  @IsNumber()
+  expectedUplift!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  timelineMonths!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  investmentRequired!: number;
+}
+
+export class StrategyExitDto {
+  @ApiProperty({ enum: ['sale', 'refinancing', 'ipo', 'secondary_sale', 'recapitalization'] })
+  @IsString()
+  type!: 'sale' | 'refinancing' | 'ipo' | 'secondary_sale' | 'recapitalization';
+
+  @ApiProperty()
+  @IsString()
+  targetTiming!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  targetMultiple!: number;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  conditions!: string[];
+}
+
+export class TargetReturnsDto {
+  @ApiProperty()
+  @IsNumber()
+  targetIrr!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  targetMoic!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  targetCashYield!: number;
+}
+
+export class InvestmentStrategyDto {
+  @ApiProperty()
+  @IsString()
+  name!: string;
+
+  @ApiProperty({ enum: ['buy_and_hold', 'value_add', 'development', 'redevelopment', 'turnaround', 'income', 'growth', 'refinancing', 'arbitrage', 'structured_financing'] })
+  @IsString()
+  strategyType!: 'buy_and_hold' | 'value_add' | 'development' | 'redevelopment' | 'turnaround' | 'income' | 'growth' | 'refinancing' | 'arbitrage' | 'structured_financing';
+
+  @ApiProperty()
+  @IsString()
+  description!: string;
+
+  @ApiProperty({ type: StrategyEntryDto })
+  @ValidateNested()
+  @Type(() => StrategyEntryDto)
+  entry!: StrategyEntryDto;
+
+  @ApiProperty({ type: StrategyOperatingDto })
+  @ValidateNested()
+  @Type(() => StrategyOperatingDto)
+  operating!: StrategyOperatingDto;
+
+  @ApiProperty({ type: StrategyFinancingDto })
+  @ValidateNested()
+  @Type(() => StrategyFinancingDto)
+  financing!: StrategyFinancingDto;
+
+  @ApiProperty({ type: StrategyValueCreationDto })
+  @ValidateNested()
+  @Type(() => StrategyValueCreationDto)
+  valueCreation!: StrategyValueCreationDto;
+
+  @ApiProperty({ type: StrategyExitDto })
+  @ValidateNested()
+  @Type(() => StrategyExitDto)
+  exit!: StrategyExitDto;
+
+  @ApiProperty()
+  @IsNumber()
+  investmentHorizonMonths!: number;
+
+  @ApiProperty({ type: [StrategyConstraintDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => StrategyConstraintDto)
+  constraints!: StrategyConstraintDto[];
+
+  @ApiProperty({ type: TargetReturnsDto })
+  @ValidateNested()
+  @Type(() => TargetReturnsDto)
+  targetReturns!: TargetReturnsDto;
+
+  @ApiProperty()
+  @IsNumber()
+  riskTolerance!: number;
+}
+
+export class SensitivityVariableDto {
+  @ApiProperty()
+  @IsString()
+  id!: string;
+
+  @ApiProperty()
+  @IsString()
+  code!: string;
+
+  @ApiProperty()
+  @IsString()
+  name!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  baseValue!: number;
+
+  @ApiProperty()
+  @IsString()
+  unit!: string;
+
+  @ApiProperty()
+  @IsString()
+  currency!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  minValue!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  maxValue!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  steps!: number;
+}
+
+export class SensitivityPointDto {
+  @ApiProperty()
+  @IsNumber()
+  value!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  irr!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  moic!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  npv!: number;
+}
+
+export class SensitivityResultDto {
+  @ApiProperty()
+  @IsString()
+  variableCode!: string;
+
+  @ApiProperty()
+  @IsString()
+  variableName!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  baseValue!: number;
+
+  @ApiProperty({ type: [SensitivityPointDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SensitivityPointDto)
+  results!: SensitivityPointDto[];
+
+  @ApiProperty({ type: [Number] })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  irrImpact!: number[];
+
+  @ApiProperty({ type: [Number] })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  moicImpact!: number[];
+
+  @ApiProperty({ type: [Number] })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  npvImpact!: number[];
+}
+
+export class TwoVariableSensitivityResultDto {
+  @ApiProperty({ type: SensitivityVariableDto })
+  @ValidateNested()
+  @Type(() => SensitivityVariableDto)
+  xVariable!: SensitivityVariableDto;
+
+  @ApiProperty({ type: SensitivityVariableDto })
+  @ValidateNested()
+  @Type(() => SensitivityVariableDto)
+  yVariable!: SensitivityVariableDto;
+
+  @ApiProperty()
+  @IsArray()
+  matrix!: any[][];
+}
+
+export class SensitivityAnalysisDto {
+  @ApiProperty()
+  @IsString()
+  id!: string;
+
+  @ApiProperty()
+  @IsString()
+  scenarioId!: string;
+
+  @ApiProperty()
+  @IsString()
+  opportunityId!: string;
+
+  @ApiProperty({ type: [SensitivityVariableDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SensitivityVariableDto)
+  variables!: SensitivityVariableDto[];
+
+  @ApiProperty({ type: [SensitivityResultDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SensitivityResultDto)
+  singleVariableResults!: SensitivityResultDto[];
+
+  @ApiProperty({ type: [TwoVariableSensitivityResultDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => TwoVariableSensitivityResultDto)
+  twoVariableResults!: TwoVariableSensitivityResultDto[];
+
+  @ApiProperty()
+  @IsString()
+  calculatedAt!: string;
+
+  @ApiProperty()
+  @IsString()
+  calculatedBy!: string;
+
+  @ApiProperty()
+  @IsString()
+  modelVersion!: string;
+}
+
+export class DimensionScoreDto {
+  @ApiProperty()
+  @IsString()
+  dimension!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  score!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  weight!: number;
+
+  @ApiProperty()
+  @IsNumber()
+  weightedScore!: number;
+
+  @ApiProperty()
+  @IsString()
+  rationale!: string;
+
+  @ApiProperty({ type: [String] })
+  @IsArray()
+  @IsString({ each: true })
+  evidence!: string[];
+}
+
+export class OpportunityScoreDto {
+  @ApiProperty()
+  @IsNumber()
+  overall!: number;
+
+  @ApiProperty({ type: [DimensionScoreDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DimensionScoreDto)
+  dimensions!: DimensionScoreDto[];
+
+  @ApiProperty()
+  @IsString()
+  scoringModelVersion!: string;
+
+  @ApiProperty()
+  @IsString()
+  calculatedAt!: string;
+
+  @ApiProperty()
+  @IsString()
+  calculatedBy!: string;
+}

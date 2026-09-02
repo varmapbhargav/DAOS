@@ -614,6 +614,51 @@ export type PoolStatus =
   | 'LIQUIDATED'
   | 'SUSPENDED';
 
+// ---------------------------------------------------------------------------
+// Communications / Interaction History
+// ---------------------------------------------------------------------------
+
+export type InteractionType =
+  | 'EMAIL'
+  | 'MEETING'
+  | 'CALL'
+  | 'MESSAGE'
+  | 'DATA_REQUEST'
+  | 'DOCUMENT_REQUEST'
+  | 'SITE_VISIT'
+  | 'NEGOTIATION'
+  | 'REVIEW';
+
+export type InteractionDirection = 'INBOUND' | 'OUTBOUND';
+
+// ---------------------------------------------------------------------------
+// Task Management
+// ---------------------------------------------------------------------------
+
+export type TaskType =
+  | 'REQUEST_DOCUMENT'
+  | 'VERIFY_OWNERSHIP'
+  | 'LEGAL_REVIEW'
+  | 'COMPLIANCE_REVIEW'
+  | 'DUE_DILIGENCE'
+  | 'VALUATION'
+  | 'RISK_REVIEW'
+  | 'APPROVAL'
+  | 'RESOLVE_BLOCKER';
+
+export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+export type TaskStatus =
+  | 'PENDING'
+  | 'ASSIGNED'
+  | 'IN_PROGRESS'
+  | 'BLOCKED'
+  | 'COMPLETED'
+  | 'CANCELLED'
+  | 'OVERDUE';
+
+export type TaskDependencyType = 'BLOCKS' | 'BLOCKED_BY' | 'RELATES_TO';
+
 export type ConcentrationRuleType =
   | 'SINGLE_ASSET_MAX'
   | 'SECTOR_MAX'
